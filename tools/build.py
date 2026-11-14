@@ -20,9 +20,11 @@ d = json.load(open(T('tools', 'program.json')))
 meta = json.load(open(T('tools', 'meta.json'))) if os.path.exists(T('tools', 'meta.json')) else {}
 films = d['f']
 for i, f in enumerate(films):
-    m = meta.get(str(i), [None, None])
+    m = meta.get(str(i), {})
+    if isinstance(m, list): m = {'rt': m[0], 'rel': m[1]}
     del f[4:]
-    f += [m[0], m[1]]
+    info = {k: m.get(k2) for k, k2 in (('g', 'genres'), ('land', 'land'), ('y', 'year'), ('regie', 'regie'), ('cast', 'cast'), ('prem', 'prem'), ('pn', 'premnote')) if m.get(k2)}
+    f += [m.get('rt'), m.get('rel'), info]
 # Doppelte zusammenlegen: Filme mit gleichem Haupttitel -> erster Eintrag gewinnt
 first = {}
 remap = {}
@@ -31,7 +33,7 @@ for i, f in enumerate(films):
     if k in first:
         j = first[k]
         remap[i] = j
-        for x in (2, 4, 5):
+        for x in (2, 4, 5, 6):
             if not films[j][x] and f[x]:
                 films[j][x] = f[x]
     else:
