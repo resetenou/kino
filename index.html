@@ -64,6 +64,17 @@ pre{margin:0;white-space:pre-wrap;background:var(--raise);border:1px solid var(-
 .film .head img{width:calc(var(--pw,130px) * .45);aspect-ratio:2/3;object-fit:cover;border-radius:6px;flex:none;background:var(--line)}
 .film .head.noimg img{display:none}
 .credit{font-size:11px;color:var(--muted)}
+.ticketname{position:relative;display:flex;flex-direction:column;gap:4px;padding:16px 18px;border-radius:14px;cursor:text;
+  background:linear-gradient(135deg,color-mix(in srgb,var(--blue) 30%,var(--raise)),color-mix(in srgb,var(--violet) 22%,var(--raise)));
+  border:2px dashed color-mix(in srgb,var(--fg) 25%,transparent);
+  -webkit-mask:radial-gradient(circle 11px at 0 50%,#0000 98%,#000) left/51% 100% no-repeat,radial-gradient(circle 11px at 100% 50%,#0000 98%,#000) right/51% 100% no-repeat;
+  mask:radial-gradient(circle 11px at 0 50%,#0000 98%,#000) left/51% 100% no-repeat,radial-gradient(circle 11px at 100% 50%,#0000 98%,#000) right/51% 100% no-repeat}
+.tn-lab{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:color-mix(in srgb,var(--fg) 75%,transparent)}
+.ticketname input{background:none;border:0;padding:2px 0;font-size:28px;font-weight:800;letter-spacing:.01em;color:var(--fg)}
+.ticketname input::placeholder{color:color-mix(in srgb,var(--fg) 45%,transparent);font-weight:600}
+.ticketname input:focus-visible{outline:none}
+.ticketname:focus-within{border-style:solid;border-color:var(--blue)}
+.ticketname .tn-hint{font-size:12px;color:color-mix(in srgb,var(--fg) 70%,transparent)}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--raise);border:1px solid var(--line);border-radius:999px;padding:8px 16px;font-size:13px}
 </style>
 
@@ -74,8 +85,11 @@ pre{margin:0;white-space:pre-wrap;background:var(--raise);border:1px solid var(-
 
   <section>
     <h2><span class="n">1</span>Wer bist du?</h2>
-    <div class="chips" id="names"></div>
-    <div class="field"><input id="nameIn" maxlength="20" placeholder="Anderer Name"></div>
+    <label class="ticketname" for="nameIn">
+      <span class="tn-lab">Ticket für</span>
+      <input id="nameIn" maxlength="20" placeholder="Tippe deinen Namen …" autocomplete="given-name" enterkeyhint="done">
+      <span class="tn-hint" id="nameHint">Dein Name erscheint in der Nachricht an die Gruppe.</span>
+    </label>
   </section>
 
   <section>
@@ -112,7 +126,6 @@ const DATA={"f":[["Der frechste Troll der Welt","Trickfilm, Familienfilm, Fantas
 const CIN=['Kiwi Center','Kiwi Loge','Maxx','Cameo'];
 const COL=['var(--blue)','var(--violet)','var(--orange)','var(--green)'];
 const WD=['So','Mo','Di','Mi','Do','Fr','Sa'];
-const NAMES=['Rémi','Nina','Ahinoa','Fabian'];
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
@@ -128,12 +141,8 @@ try{const v=JSON.parse(localStorage.getItem('kinobande')||'null');if(v)st={...st
 function save(){try{localStorage.setItem('kinobande',JSON.stringify(st))}catch(e){}}
 function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2000)}
 
-function renderNames(){
-  $('#names').innerHTML=NAMES.map(n=>`<button class="chip" data-n="${n}" aria-pressed="${st.name===n}">${n}</button>`).join('');
-  $('#names').querySelectorAll('[data-n]').forEach(b=>b.onclick=()=>{st.name=b.dataset.n;$('#nameIn').value='';save();renderNames();renderOut()});
-  if(!NAMES.includes(st.name))$('#nameIn').value=st.name;
-}
-$('#nameIn').oninput=e=>{st.name=e.target.value.trim();save();renderNames();renderOut()};
+function renderNames(){$('#nameIn').value=st.name||'';$('#nameHint').textContent=st.name?'Hallo '+st.name+'! Jetzt unten Filme antippen.':'Dein Name erscheint in der Nachricht an die Gruppe.'}
+$('#nameIn').oninput=e=>{st.name=e.target.value.trim();save();$('#nameHint').textContent=st.name?'Hallo '+st.name+'! Jetzt unten Filme antippen.':'Dein Name erscheint in der Nachricht an die Gruppe.';renderOut()};
 
 const SIZES=[['S',90],['M',130],['L',180],['XL',260]];
 function applySize(){
