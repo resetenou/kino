@@ -135,9 +135,10 @@ function renderNames(){
 }
 $('#nameIn').oninput=e=>{st.name=e.target.value.trim();save();renderNames();renderOut()};
 
-const SIZES=[['Aus',0],['S',90],['M',130],['L',180],['XL',260]];
+const SIZES=[['S',90],['M',130],['L',180],['XL',260]];
 function applySize(){
-  const px=st.size??130;document.documentElement.style.setProperty('--pw',(px||130)+'px');
+  if(!SIZES.some(s=>s[1]===st.size))st.size=130;
+  const px=st.size;document.documentElement.style.setProperty('--pw',(px||130)+'px');
   $('#films').classList.toggle('noimg',!px);
   document.querySelectorAll('.film .head').forEach(h=>h.classList.toggle('noimg',!px));
   $('#sizes').innerHTML='<span>Bildgrösse:</span>'+SIZES.map(([l,v])=>`<button class="sz" data-sz="${v}" aria-pressed="${(st.size??130)===v}">${l}</button>`).join('');
