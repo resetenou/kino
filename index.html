@@ -1,7 +1,7 @@
 <!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"></head><body style="margin:0"><title>Kino-Programm Winterthur</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Arvo:wght@400;700&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap">
 <style>
 /* Kino-Ästhetik: schwarz, ein Rot, sonst nur Grautöne. Zeiten tragen ihre Tageshelligkeit. */
 :root{
@@ -54,15 +54,32 @@ details.sec>summary::after{content:"+";margin-left:auto;font-size:22px;color:var
 details.sec[open]>summary::after{content:"–"}
 details.sec>.body{display:flex;flex-direction:column;gap:12px;padding-bottom:20px}
 
-/* Name als Kinoticket */
-.ticket{display:flex;flex-direction:column;gap:2px;padding:14px 18px;border-radius:6px;background:var(--red);color:#fff;cursor:text;position:relative;
-  -webkit-mask:radial-gradient(circle 10px at 0 50%,#0000 98%,#000) left/51% 100% no-repeat,radial-gradient(circle 10px at 100% 50%,#0000 98%,#000) right/51% 100% no-repeat;
-  mask:radial-gradient(circle 10px at 0 50%,#0000 98%,#000) left/51% 100% no-repeat,radial-gradient(circle 10px at 100% 50%,#0000 98%,#000) right/51% 100% no-repeat}
-.ticket .lab{font-size:10px;letter-spacing:.22em;text-transform:uppercase;opacity:.8}
-.ticket input{background:none;border:0;padding:0;font-family:var(--f-head);font-size:36px;letter-spacing:.03em;color:#fff}
-.ticket input::placeholder{color:rgba(255,255,255,.55)}
-.ticket input:focus-visible{outline:none}
-.ticket .hint{font-size:12px;opacity:.85}
+/* Vintage-Kinoticket: Papier, weinroter Abriss, ausgestanzte Ränder */
+:root{--paper:#efe4cf;--ink:#3b3a38;--wine:#9e1b2b}
+.tk{--notch:radial-gradient(circle 9px at 0 50%,#0000 97%,#000) left/51% 100% no-repeat,radial-gradient(circle 9px at 100% 50%,#0000 97%,#000) right/51% 100% no-repeat;
+  display:grid;grid-template-columns:34px 1fr 40px;background:var(--wine);padding:6px;color:var(--ink);font-family:Arvo,Rockwell,Georgia,serif;
+  -webkit-mask:var(--notch);mask:var(--notch);filter:drop-shadow(3px 3px 0 #000)}
+.tk .stub{display:flex;align-items:center;justify-content:center;writing-mode:vertical-rl;transform:rotate(180deg);font-size:10px;font-weight:700;letter-spacing:.24em;color:var(--paper)}
+.tk .face{background:var(--paper);border:1.5px solid var(--wine);outline:1px solid var(--paper);outline-offset:-5px;padding:10px 12px;display:flex;flex-direction:column;gap:4px;min-width:0;cursor:text}
+.tk .top{font-size:11px;letter-spacing:.18em;text-align:center;text-transform:uppercase;color:var(--wine)}
+.tk .top b{letter-spacing:.4em;margin:0 6px}
+.tk input{background:none;border:0;border-bottom:1.5px dashed var(--wine);border-radius:0;padding:2px 0;text-align:center;font-family:Arvo,Rockwell,Georgia,serif;font-weight:700;font-size:28px;color:var(--ink);text-transform:uppercase}
+.tk input::placeholder{color:rgba(59,58,56,.38)}
+.tk input:focus-visible{outline:none;border-bottom-style:solid}
+.tk .row3{display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--wine);margin-top:4px}
+.tk .row3 span{display:flex;flex-direction:column;align-items:center;padding-top:4px;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--wine)}
+.tk .row3 span+span{border-left:1px solid var(--wine)}
+.tk .row3 b{font-size:15px;color:var(--ink);letter-spacing:.02em}
+.tk .hint{font-family:var(--f-body);font-size:11px;color:#6b6457;text-align:center}
+.tk .ser{background:var(--paper);border-left:2px dashed var(--wine);margin-left:-1px;display:flex;align-items:center;justify-content:center;writing-mode:vertical-rl;font-size:15px;font-weight:700;letter-spacing:.12em;color:var(--ink)}
+/* Mini-Tickets der gewählten Vorstellungen */
+.tks{display:flex;flex-direction:column;gap:8px}
+.tks .tk{grid-template-columns:26px 1fr 34px;padding:4px}
+.tks .tk .face{padding:7px 10px;gap:2px;cursor:default}
+.tks .tk .ft{font-weight:700;font-size:14px;text-transform:uppercase;line-height:1.15;color:var(--ink)}
+.tks .tk .row3 b{font-size:13px}
+.tks .tk .ser{font-size:12px}
+.tks .tk .stub{font-size:12px;letter-spacing:.3em}
 
 /* Umschalter über volle Breite */
 .seg{display:grid;grid-template-columns:1fr 1fr;border:2px solid var(--fg);border-radius:2px;overflow:hidden;box-shadow:3px 3px 0 var(--red)}
@@ -216,10 +233,15 @@ pre{margin:0;white-space:pre-wrap;background:var(--s1);border:1px solid var(--li
   <details class="sec" data-sec="1" open>
     <summary><span class="n">1</span><h2>Wer bist du?</h2></summary>
     <div class="body">
-      <label class="ticket" for="nameIn">
-        <span class="lab">Ticket für</span>
-        <input id="nameIn" maxlength="20" placeholder="Dein Name" autocomplete="given-name" enterkeyhint="done">
-        <span class="hint" id="nameHint"></span>
+      <label class="tk" for="nameIn">
+        <span class="stub">★ EINTRITT ★</span>
+        <span class="face">
+          <span class="top">Kinobande <b>★★★</b> Winterthur</span>
+          <input id="nameIn" maxlength="20" placeholder="Dein Name" autocomplete="given-name" enterkeyhint="done">
+          <span class="row3"><span>Kinos<b>4</b></span><span>Filme<b id="tkF">0</b></span><span>Zeiten<b id="tkZ">0</b></span></span>
+          <span class="hint" id="nameHint"></span>
+        </span>
+        <span class="ser" id="tkNo">Nº 000</span>
       </label>
     </div>
   </details>
@@ -260,7 +282,8 @@ pre{margin:0;white-space:pre-wrap;background:var(--s1);border:1px solid var(--li
   <details class="sec" data-sec="4" open>
     <summary><span class="n">4</span><h2>In die Gruppe schicken</h2></summary>
     <div class="body">
-      <pre id="out">Noch nichts gewählt.</pre>
+      <div class="tks" id="tks"></div>
+      <details class="filt"><summary>Text für WhatsApp ansehen</summary><pre id="out" style="margin:0 12px 12px">Noch nichts gewählt.</pre></details>
       <div class="row"><button class="btn" id="copy">Text kopieren</button><span class="muted" id="cnt"></span></div>
     </div>
   </details>
@@ -326,8 +349,9 @@ const isNew=f=>{const r=DATA.f[f][5];if(!r)return false;const d=(Date.now()-new 
 document.querySelectorAll('details.sec').forEach(d=>{const k=d.dataset.sec;if(st.sec[k]===false)d.open=false;d.addEventListener('toggle',()=>{st.sec[k]=d.open;save()})});
 
 function nameHint(){return st.name?'Hallo '+st.name+'! Jetzt Filme doppelt antippen.':'Dein Name erscheint in der Nachricht an die Gruppe.'}
-$('#nameIn').value=st.name||'';$('#nameHint').textContent=nameHint();
-$('#nameIn').oninput=e=>{st.name=e.target.value.trim();save();$('#nameHint').textContent=nameHint();renderOut()};
+const serial=n=>{let h=7;for(const c of n||'')h=(h*31+c.charCodeAt(0))%9973;return 'Nº '+String(h).padStart(4,'0')};
+$('#nameIn').value=st.name||'';$('#tkNo').textContent=serial(st.name);$('#nameHint').textContent=nameHint();
+$('#nameIn').oninput=e=>{st.name=e.target.value.trim();$('#tkNo').textContent=serial(st.name);save();$('#nameHint').textContent=nameHint();renderOut()};
 
 function tcard(i){const t=DATA.f[i][0],sh=DATA.s.find(r=>r[0]===i),ci=sh?sh[1]:3;const w=t.split(/\s+/),L=[];let cur='';
   w.forEach(x=>{if((cur+' '+x).trim().length>11&&cur){L.push(cur);cur=x}else cur=(cur+' '+x).trim()});if(cur)L.push(cur);
@@ -440,7 +464,10 @@ function myText(){
   if(!picks.length)return '';
   return `🎬 Kinobande – ${st.name||'Ich'} kann:\n`+picks.map(s=>`#${s.no} ${label(s)}`).join('\n');
 }
-function renderOut(){const t=myText();$('#out').textContent=t||'Noch nichts gewählt.';$('#cnt').textContent=t?`${st.picks.length} Vorstellungen gewählt`:'';renderHits()}
+function renderOut(){const t=myText();
+  const P=SHOWS.filter(s=>st.picks.includes(s.no)&&(s.d+' '+s.t)>=nowStr).sort((a,b)=>(yr(a.d)+a.t).localeCompare(yr(b.d)+b.t));
+  $('#tkF').textContent=st.films.length;$('#tkZ').textContent=P.length;
+  $('#tks').innerHTML=P.length?P.map(s=>`<div class="tk"><span class="stub">★★★</span><span class="face"><span class="ft">${esc(DATA.f[s.f][0])}</span><span class="row3"><span>Tag<b>${day(s.d)}</b></span><span>Zeit<b>${s.t}</b></span><span>Kino<b>${CIN[s.c].replace('Kiwi ','')}</b></span></span></span><span class="ser">Nº ${String(s.no).padStart(3,'0')}</span></div>`).join(''):'<p class="muted">Noch keine Vorstellung gewählt – oben bei «Wann kannst du?» Zeiten antippen.</p>';$('#out').textContent=t||'Noch nichts gewählt.';$('#cnt').textContent=t?`${st.picks.length} Vorstellungen gewählt`:'';renderHits()}
 $('#connBtn').onclick=()=>{$('#connPanel').hidden=!$('#connPanel').hidden};
 $('#copy').onclick=async()=>{const t=myText();if(!t){toast('Zuerst Vorstellungen wählen');return}
   try{await navigator.clipboard.writeText(t+'\n\n(Trag dich auch ein: https://resetenou.github.io/kino/)');toast('Kopiert – jetzt in WhatsApp einfügen')}
