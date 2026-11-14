@@ -75,7 +75,28 @@ pre{margin:0;white-space:pre-wrap;background:var(--raise);border:1px solid var(-
 .ticketname input:focus-visible{outline:none}
 .ticketname:focus-within{border-style:solid;border-color:var(--blue)}
 .ticketname .tn-hint{font-size:12px;color:color-mix(in srgb,var(--fg) 70%,transparent)}
+[hidden]{display:none!important}
 input,select,textarea{box-sizing:border-box}
+.fside .times .t{min-width:84px;padding:5px 8px}
+.connect{border:1px dashed var(--blue);background:color-mix(in srgb,var(--blue) 12%,var(--raise));color:var(--fg);border-radius:10px;padding:7px 12px;font-size:13px}
+.connpanel{border:1px solid var(--blue);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:6px;font-size:14px;background:color-mix(in srgb,var(--blue) 8%,var(--surface))}
+.fside{display:grid;grid-template-columns:calc(var(--pw,130px) * .75) 1fr;gap:12px;align-items:start;border-top:1px solid var(--line);padding-top:12px}
+.fside:first-child{border-top:0;padding-top:0}
+.fside>img{width:100%;aspect-ratio:2/3;object-fit:cover;border-radius:8px;background:var(--line)}
+.fside .info{min-width:0;display:flex;flex-direction:column;gap:6px}
+.fside .bar{display:flex;gap:6px;flex-wrap:wrap}
+.cal{display:flex;flex-direction:column;gap:14px}
+.cal .dayh{font-weight:700;font-size:15px;border-bottom:1px solid var(--line);padding-bottom:4px;display:flex;justify-content:space-between}
+.cal .dayh small{font-weight:400;color:var(--muted)}
+.cal .slots{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+.t2{display:grid;grid-template-columns:74px 34px 1fr;gap:10px;align-items:center;border:1px solid var(--line);background:var(--raise);border-radius:10px;padding:6px 10px;text-align:left}
+.t2 .h{font-family:var(--f-mono);font-size:16px}
+.t2 img{width:34px;aspect-ratio:2/3;object-fit:cover;border-radius:4px;background:var(--line)}
+.t2 .w{display:flex;flex-direction:column;font-size:13px;line-height:1.3;min-width:0}
+.t2 .w small{color:var(--muted);display:flex;gap:5px;align-items:center}
+.t2 .w small i{width:7px;height:7px;border-radius:50%;display:inline-block}
+.t2[aria-pressed="true"]{background:color-mix(in srgb,var(--green) 25%,var(--raise));border-color:var(--green)}
+.t2[aria-pressed="true"] .h::before{content:"✓ ";color:var(--green)}
 .filters{display:flex;flex-direction:column;gap:10px;border:1px solid var(--line);border-radius:12px;padding:10px}
 .seg{display:flex;gap:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;width:max-content;max-width:100%}
 .seg button{border:0;background:var(--raise);padding:7px 14px;font-size:13px}
@@ -128,7 +149,14 @@ select{background:var(--raise);border:1px solid var(--line);border-radius:10px;p
 
   <section>
     <h2><span class="n">3</span>Wann kannst du?</h2>
-    <p class="muted">Tippe jede Vorstellung an, an der du Zeit hast.</p>
+    <p class="muted">Tippe bei deinen Filmen jede Vorstellung an, an der du Zeit hast. Am besten zu Monatsbeginn oder sobald das neue Programm steht.</p>
+    <div class="row"><div class="seg" id="showSeg"></div><button class="connect" id="connBtn">🔗 Mit Kalender / Claude / ChatGPT verbinden</button></div>
+    <div class="connpanel" id="connPanel" hidden>
+      <b>Bald: Termine automatisch finden</b>
+      <p>Später kann hier jeder seinen Kalender oder seine KI (Claude, ChatGPT) verbinden.</p>
+      <p>Dann gleichen die KIs eure Kalender selbst ab und schlagen Vorstellungen vor, die allen passen, ohne dass jemand planen muss.</p>
+      <p class="muted">Bis dahin: Zeiten unten von Hand an- und abklicken.</p>
+    </div>
     <div id="shows"><p class="muted">Wähle zuerst oben mindestens einen Film.</p></div>
     <div class="legend"><span>D = Deutsch</span><span>E/d = Englisch, deutsche Untertitel</span><span>E/df = Englisch, deutsch-französische Untertitel</span></div>
   </section>
@@ -212,8 +240,22 @@ function renderFilms(){
 }
 function renderShows(){
   if(!st.films.length){$('#shows').innerHTML='<p class="muted">Wähle zuerst oben mindestens einen Film.</p>';return}
-  $('#shows').innerHTML=st.films.map(f=>{const list=UP.filter(s=>s.f===f&&ok(s));if(!list.length)return `<div class="film"><b>${esc(DATA.f[f][0])}</b><span class="muted">Keine Vorstellung passt zu den Filtern oben.</span></div>`;
-    return `<div class="film"><div class="head">${img(f)}<div><b>${esc(DATA.f[f][0])}</b><br><span class="muted">${esc(DATA.f[f][1])}</span><br><a href="${esc(DATA.f[f][3])}" target="_blank" rel="noopener" style="color:var(--blue);font-size:13px">Trailer &amp; Infos</a></div></div><div class="times">${list.map(s=>`<button class="t" data-no="${s.no}" aria-pressed="${st.picks.includes(s.no)}" title="${esc((s.h||'')+' '+(s.x||''))}"><span class="d">${day(s.d)}</span><span class="h">${s.t}</span><span class="c"><i style="background:${COL[s.c]}"></i>${CIN[s.c]}${s.l?' · '+esc(s.l):''}</span></button>`).join('')}</div></div>`}).join('');
+  const sv=st.sv||'cover';
+  $('#showSeg').innerHTML=[['cover','Neben Cover'],['kal','Kalender']].map(([k,l])=>`<button data-sv="${k}" aria-pressed="${sv===k}">${l}</button>`).join('');
+  $('#showSeg').querySelectorAll('[data-sv]').forEach(b=>b.onclick=()=>{st.sv=b.dataset.sv;save();renderShows()});
+  const mine=UP.filter(s=>st.films.includes(s.f)&&ok(s));
+  const tbtn=s=>`<button class="t" data-no="${s.no}" aria-pressed="${st.picks.includes(s.no)}" title="${esc((s.h||'')+' '+(s.x||''))}"><span class="d">${day(s.d)}</span><span class="h">${s.t}</span><span class="c"><i style="background:${COL[s.c]}"></i>${CIN[s.c]}${s.l?' · '+esc(s.l):''}</span></button>`;
+  const bulk=f=>`<div class="bar"><button class="sz" data-all="${f}">Alle an</button><button class="sz" data-none="${f}">Alle aus</button><a class="sz" style="text-decoration:none;color:var(--fg)" href="${esc(DATA.f[f][3])}" target="_blank" rel="noopener">Trailer &amp; Infos</a></div>`;
+  if(sv==='cover'){
+    $('#shows').innerHTML=st.films.map(f=>{const list=mine.filter(s=>s.f===f);
+      return `<div class="fside">${img(f)}<div class="info"><b>${esc(DATA.f[f][0])}</b><span class="muted">${esc(DATA.f[f][1])}</span>${list.length?`<div class="times">${list.map(tbtn).join('')}</div>${bulk(f)}`:'<span class="muted">Keine Vorstellung passt zu den Filtern oben.</span>'}</div></div>`}).join('');
+  }else{
+    const days=[...new Set(mine.map(s=>s.d))];
+    $('#shows').innerHTML=days.length?`<div class="cal">${days.map(d=>{const l=mine.filter(s=>s.d===d).sort((a,b)=>a.t.localeCompare(b.t));const n=l.filter(s=>st.picks.includes(s.no)).length;
+      return `<div><div class="dayh">${day(d)}<small>${n?n+' gewählt':''}</small></div><div class="slots">${l.map(s=>`<button class="t2" data-no="${s.no}" aria-pressed="${st.picks.includes(s.no)}"><span class="h">${s.t}</span>${img(s.f)}<span class="w"><b>${esc(DATA.f[s.f][0])}</b><small><i style="background:${COL[s.c]}"></i>${CIN[s.c]}${s.l?' · '+esc(s.l):''}</small></span></button>`).join('')}</div></div>`}).join('')}</div>`:'<p class="muted">Keine Vorstellung passt zu den Filtern oben.</p>';
+  }
+  $('#shows').querySelectorAll('[data-all]').forEach(b=>b.onclick=()=>{const f=+b.dataset.all;mine.filter(s=>s.f===f).forEach(s=>{if(!st.picks.includes(s.no))st.picks.push(s.no)});save();renderShows();renderOut()});
+  $('#shows').querySelectorAll('[data-none]').forEach(b=>b.onclick=()=>{const f=+b.dataset.none;const n=new Set(mine.filter(s=>s.f===f).map(s=>s.no));st.picks=st.picks.filter(x=>!n.has(x));save();renderShows();renderOut()});
   applySize();
   $('#shows').querySelectorAll('[data-no]').forEach(b=>b.onclick=()=>{const n=+b.dataset.no;st.picks=st.picks.includes(n)?st.picks.filter(x=>x!==n):[...st.picks,n];save();b.setAttribute('aria-pressed',st.picks.includes(n));renderOut()});
 }
@@ -223,6 +265,7 @@ function myText(){
   return `🎬 Kinobande – ${st.name||'Ich'} kann:\n`+picks.map(s=>`#${s.no} ${label(s)}`).join('\n');
 }
 function renderOut(){const t=myText();$('#out').textContent=t||'Noch nichts gewählt.';$('#cnt').textContent=t?`${st.picks.length} Vorstellungen gewählt`:'';renderHits()}
+$('#connBtn').onclick=()=>{$('#connPanel').hidden=!$('#connPanel').hidden};
 $('#copy').onclick=async()=>{const t=myText();if(!t){toast('Zuerst Vorstellungen wählen');return}
   try{await navigator.clipboard.writeText(t+'\n\n(Trag dich auch ein: Kinobande-App)');toast('Kopiert – jetzt in WhatsApp einfügen')}
   catch(e){const r=document.createRange();r.selectNodeContents($('#out'));const s=getSelection();s.removeAllRanges();s.addRange(r);toast('Text markiert – jetzt kopieren')}};
