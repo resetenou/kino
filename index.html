@@ -1,287 +1,323 @@
-<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"></head><body style="margin:0"><title>Kinobande Winterthur</title>
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"></head><body style="margin:0"><title>Kino-Programm Winterthur</title>
 <meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap">
 <style>
-/* Layout: eine Spalte, drei nummerierte Schritte untereinander (wer – was – wann), unten der Treffer-Teil. Kinos tragen je eine feste Farbe. */
+/* Kino-Ästhetik: schwarz, ein Rot, sonst nur Grautöne. Zeiten tragen ihre Tageshelligkeit. */
 :root{
-  --bg:#0c0e13; --surface:#151922; --raise:#1d2330; --line:#2a3140;
-  --fg:#f2f4f7; --muted:#8e97a8;
-  --blue:#0a84ff; --green:#30d158; --yellow:#ffd60a; --orange:#ff9f0a; --violet:#bf5af2;
-  --f-body:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --bg:#070707; --s1:#111111; --s2:#1a1a1a; --line:#272727;
+  --fg:#f4f1ec; --muted:#8c8780; --red:#e3232c; --red2:#7a1015; --star:#ffcf3f;
+  --f-head:"Bebas Neue",Impact,"Arial Narrow",sans-serif;
+  --f-body:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
   --f-mono:ui-monospace,Menlo,Consolas,monospace;
   color-scheme:dark;
 }
+*{box-sizing:border-box}
 body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.45}
-.app{max-width:680px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:18px 60px;display:flex;flex-direction:column;gap:22px}
-h1{margin:0;font-size:30px;font-weight:800;letter-spacing:-.01em;text-transform:uppercase}
-h1 small{display:block;font-size:12px;font-weight:500;color:var(--muted);letter-spacing:.08em;margin-top:2px}
-h2{margin:0;font-size:18px;display:flex;align-items:center;gap:10px}
-h2 .n{width:26px;height:26px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;font-size:14px;flex:none}
+[hidden]{display:none!important}
+button{font:inherit;color:inherit;cursor:pointer;background:none;border:0;padding:0}
+button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+input,textarea{background:var(--s2);border:1px solid var(--line);border-radius:8px;padding:10px 12px;color:var(--fg);font:inherit;width:100%;min-width:0}
+textarea{min-height:110px;resize:vertical;font-size:13px}
 p{margin:0}
 .muted{color:var(--muted);font-size:13px}
-section{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:12px}
-.chips{display:flex;flex-wrap:wrap;gap:8px}
-button{font:inherit;color:inherit;cursor:pointer}
-button:focus-visible,textarea:focus-visible,input:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
-.chip{border:1px solid var(--line);background:var(--raise);border-radius:999px;padding:7px 13px;font-size:14px;text-align:left}
-.chip[aria-pressed="true"]{background:color-mix(in srgb,var(--blue) 28%,var(--raise));border-color:var(--blue)}
-.chip small{color:var(--muted);margin-left:4px}
-.field{display:flex;gap:8px}
-input,textarea{background:var(--raise);border:1px solid var(--line);border-radius:10px;padding:10px 12px;color:var(--fg);font:inherit;width:100%;min-width:0}
-textarea{min-height:110px;resize:vertical;font-size:13px}
-.film{border-top:1px solid var(--line);padding-top:10px;display:flex;flex-direction:column;gap:8px}
-.film:first-child{border-top:0;padding-top:0}
-.film b{font-size:15px}
-.times{display:flex;flex-wrap:wrap;gap:6px}
-.t{border:1px solid var(--line);background:var(--raise);border-radius:10px;padding:6px 10px;display:flex;flex-direction:column;align-items:flex-start;line-height:1.25;min-width:96px}
-.t .d{font-size:12px;color:var(--muted)}
-.t .h{font-family:var(--f-mono);font-size:16px;font-variant-numeric:tabular-nums}
-.t .c{font-size:11px;display:flex;align-items:center;gap:5px}
-.t .c i{width:7px;height:7px;border-radius:50%;display:inline-block}
-.t[aria-pressed="true"]{background:color-mix(in srgb,var(--green) 25%,var(--raise));border-color:var(--green)}
-.t[aria-pressed="true"] .h::before{content:"✓ ";color:var(--green)}
-.btn{background:var(--blue);color:#fff;border:0;border-radius:10px;padding:11px 16px;font-weight:600}
-.btn.ghost{background:var(--raise);color:var(--fg);border:1px solid var(--line)}
-.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-pre{margin:0;white-space:pre-wrap;background:var(--raise);border:1px solid var(--line);border-radius:10px;padding:10px;font-size:13px;font-family:var(--f-mono)}
-.hit{border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:center}
-.hit.all{border-color:var(--green);background:color-mix(in srgb,var(--green) 10%,var(--surface))}
+.app{max-width:720px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 70px;display:flex;flex-direction:column;gap:14px}
+
+/* Kopf */
+header{display:flex;align-items:flex-start;gap:12px;padding-bottom:14px;border-bottom:2px solid var(--red)}
+header .tt{flex:1;min-width:0}
+h1{margin:0;font-family:var(--f-head);font-weight:400;font-size:44px;line-height:.9;letter-spacing:.02em}
+h1 span{color:var(--red)}
+.sub{font-size:12px;color:var(--muted);margin-top:8px;letter-spacing:.02em;display:flex;flex-direction:column;gap:1px}
+.sub b{color:var(--fg);font-weight:500}
+.search{flex:0 1 170px;min-width:110px;display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:0 12px;background:var(--s1);margin-top:4px}
+.search input{border:0;background:none;padding:9px 0;font-size:14px}
+.search input:focus-visible{outline:none}
+.search:focus-within{border-color:var(--red)}
+
+/* Abschnitte, alle zuklappbar */
+details.sec{border-bottom:1px solid var(--line)}
+details.sec>summary{list-style:none;cursor:pointer;display:flex;align-items:baseline;gap:12px;padding:14px 0}
+details.sec>summary::-webkit-details-marker{display:none}
+details.sec>summary .n{font-family:var(--f-head);font-size:30px;color:var(--red);line-height:1;width:22px}
+details.sec>summary h2{margin:0;font-family:var(--f-head);font-weight:400;font-size:28px;letter-spacing:.03em;line-height:1}
+details.sec>summary .hint{font-size:11px;color:var(--muted);letter-spacing:.04em}
+details.sec>summary::after{content:"+";margin-left:auto;font-size:22px;color:var(--muted);line-height:1}
+details.sec[open]>summary::after{content:"–"}
+details.sec>.body{display:flex;flex-direction:column;gap:12px;padding-bottom:20px}
+
+/* Name als Kinoticket */
+.ticket{display:flex;flex-direction:column;gap:2px;padding:14px 18px;border-radius:6px;background:var(--red);color:#fff;cursor:text;position:relative;
+  -webkit-mask:radial-gradient(circle 10px at 0 50%,#0000 98%,#000) left/51% 100% no-repeat,radial-gradient(circle 10px at 100% 50%,#0000 98%,#000) right/51% 100% no-repeat;
+  mask:radial-gradient(circle 10px at 0 50%,#0000 98%,#000) left/51% 100% no-repeat,radial-gradient(circle 10px at 100% 50%,#0000 98%,#000) right/51% 100% no-repeat}
+.ticket .lab{font-size:10px;letter-spacing:.22em;text-transform:uppercase;opacity:.8}
+.ticket input{background:none;border:0;padding:0;font-family:var(--f-head);font-size:36px;letter-spacing:.03em;color:#fff}
+.ticket input::placeholder{color:rgba(255,255,255,.55)}
+.ticket input:focus-visible{outline:none}
+.ticket .hint{font-size:12px;opacity:.85}
+
+/* Umschalter über volle Breite */
+.seg{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{padding:11px 8px;font-size:14px;font-weight:600;color:var(--muted);background:var(--s1)}
+.seg button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+
+/* Filter: nur ausklappbar */
+details.filt{border:1px solid var(--line);border-radius:8px;background:var(--s1)}
+details.filt>summary{list-style:none;cursor:pointer;padding:10px 12px;font-size:13px;font-weight:600;display:flex;gap:8px;align-items:center;color:var(--muted)}
+details.filt>summary::-webkit-details-marker{display:none}
+details.filt>summary b{color:var(--fg)}
+details.filt>summary::after{content:"▾";margin-left:auto}
+details.filt[open]>summary::after{content:"▴"}
+.fbody{padding:0 12px 12px;display:flex;flex-direction:column;gap:14px}
+.flab{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.cinrow{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.ctile{display:flex;flex-direction:column;text-align:left;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--s2)}
+.ctile img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;filter:grayscale(1) brightness(.35);transition:filter .2s}
+.ctile span{padding:6px 7px;display:flex;flex-direction:column;gap:1px;line-height:1.2}
+.ctile b{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ctile small{font-size:11px;color:var(--muted)}
+.ctile[aria-pressed="true"]{border-color:var(--red)}
+.ctile[aria-pressed="true"] img{filter:none}
+.ctile[aria-pressed="false"] b{color:var(--muted)}
+.trow{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
+.tch{border-radius:6px;padding:8px 4px;display:flex;flex-direction:column;align-items:center;gap:1px;border:2px solid transparent;line-height:1.15}
+.tch b{font-size:12px}.tch small{font-size:10px;opacity:.75;font-family:var(--f-mono)}
+.tch[aria-pressed="true"]{border-color:var(--red)}
+.tch.off{opacity:.25}
+.frow{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.lnk{font-size:12px;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
+
+/* Kinogruppen und Karten */
+details.cin>summary{list-style:none;cursor:pointer;display:flex;align-items:baseline;gap:8px;padding:12px 0 8px;border-bottom:1px solid var(--line)}
+details.cin>summary::-webkit-details-marker{display:none}
+details.cin>summary b{font-family:var(--f-head);font-weight:400;font-size:22px;letter-spacing:.04em}
+details.cin>summary small{color:var(--muted);font-size:12px}
+details.cin>summary::after{content:"+";margin-left:auto;color:var(--muted);font-size:18px}
+details.cin[open]>summary::after{content:"–"}
+details.cin[open]>.grid{margin-top:10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px 10px}
+.card{display:flex;flex-direction:column;gap:6px;cursor:pointer;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;touch-action:manipulation;position:relative}
+.card .pimg{position:relative;display:block;border-radius:4px;overflow:hidden;outline:2px solid transparent;outline-offset:2px}
+.card img{width:100%;aspect-ratio:2/3;object-fit:cover;display:block;background:var(--s2)}
+.card .lang{position:absolute;left:5px;bottom:5px;display:flex;gap:3px}
+.lang i{font-style:normal;font-size:10px;font-weight:700;letter-spacing:.06em;padding:2px 5px;border-radius:3px;background:rgba(0,0,0,.78);color:#fff}
+.lang i.lov{background:var(--fg);color:var(--bg)}
+.card .new{position:absolute;left:5px;top:5px;font-size:10px;font-weight:700;letter-spacing:.1em;background:var(--red);color:#fff;padding:2px 6px;border-radius:3px}
+.card .cap{display:flex;flex-direction:column;gap:1px;font-size:13px;line-height:1.25}
+.card .cap b{font-weight:600}
+.card .cap small{color:var(--muted);font-size:11px}
+.card[aria-pressed="true"] .pimg{outline-color:var(--star)}
+.card[aria-pressed="true"]::after{content:"★";position:absolute;top:6px;right:6px;width:26px;height:26px;border-radius:50%;background:var(--star);color:#1a1300;display:grid;place-items:center;font-size:15px}
+.colall{align-self:flex-end;font-size:12px;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
+.credit{font-size:10px;color:var(--muted)}
+
+/* Zeiten mit Tageshelligkeit und ungefährer Endzeit */
+.fside{display:grid;grid-template-columns:180px 1fr;gap:14px;align-items:start;padding:14px 0;border-top:1px solid var(--line)}
+.fside:first-child{border-top:0;padding-top:0}
+@media (max-width:440px){.fside{grid-template-columns:120px 1fr}}
+.fside>img{width:100%;aspect-ratio:2/3;object-fit:cover;border-radius:4px;background:var(--s2)}
+.fside .info{min-width:0;display:flex;flex-direction:column;gap:6px}
+.fside .info>b{font-size:16px}
+.times{display:flex;flex-direction:column;gap:5px}
+.t{display:grid;grid-template-columns:auto 1fr auto;gap:2px 10px;align-items:center;border-radius:6px;padding:7px 10px;text-align:left;border:2px solid transparent;width:100%}
+.t .d{font-size:11px;opacity:.75;grid-column:1/-1}
+.t .h{font-family:var(--f-mono);font-size:15px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.t .h small{font-size:11px;opacity:.7}
+.t .c{font-size:11px;opacity:.8;text-align:right}
+.t .bar{grid-column:1/-1;height:3px;border-radius:2px;background:rgba(127,127,127,.25);position:relative;margin-top:3px}
+.t .bar i{position:absolute;top:0;bottom:0;border-radius:2px;background:currentColor;opacity:.75}
+.t[aria-pressed="true"]{border-color:var(--red);box-shadow:inset 0 0 0 1px var(--red)}
+.t[aria-pressed="true"] .h::before{content:"✓ ";color:var(--red);font-weight:700}
+.bulk{display:flex;gap:14px;flex-wrap:wrap}
+.cal{display:flex;flex-direction:column;gap:14px}
+.dayh{font-family:var(--f-head);font-size:20px;letter-spacing:.04em;border-bottom:1px solid var(--line);padding-bottom:2px;display:flex;justify-content:space-between;align-items:baseline}
+.dayh small{font-family:var(--f-body);font-size:12px;color:var(--muted)}
+.slots{display:flex;flex-direction:column;gap:5px;margin-top:6px}
+.t2{display:grid;grid-template-columns:auto 30px 1fr;gap:3px 10px;align-items:center;border-radius:6px;padding:6px 10px;text-align:left;border:2px solid transparent;width:100%}
+.t2 img{width:30px;aspect-ratio:2/3;object-fit:cover;border-radius:3px;grid-row:span 2}
+.t2 .h{font-family:var(--f-mono);font-size:14px;white-space:nowrap}
+.t2 .h small{font-size:10px;opacity:.7}
+.t2 .w{display:flex;flex-direction:column;font-size:13px;line-height:1.25;min-width:0;grid-row:span 2}
+.t2 .w small{font-size:11px;opacity:.75}
+.t2 .bar{height:3px;border-radius:2px;background:rgba(127,127,127,.25);position:relative}
+.t2 .bar i{position:absolute;top:0;bottom:0;border-radius:2px;background:currentColor;opacity:.75}
+.t2[aria-pressed="true"]{border-color:var(--red)}
+.axis{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);font-family:var(--f-mono)}
+.connect{border:1px dashed var(--line);border-radius:8px;padding:10px 12px;font-size:13px;color:var(--muted);text-align:left}
+.connpanel{border:1px solid var(--line);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:6px;font-size:14px;background:var(--s1)}
+.btn{background:var(--red);color:#fff;border-radius:8px;padding:12px 16px;font-weight:600}
+.btn.ghost{background:var(--s2);color:var(--fg)}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+pre{margin:0;white-space:pre-wrap;background:var(--s1);border:1px solid var(--line);border-radius:8px;padding:10px;font-size:13px;font-family:var(--f-mono)}
+.hit{border:1px solid var(--line);border-radius:8px;padding:10px 12px;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:center}
+.hit.all{border-color:var(--red);background:color-mix(in srgb,var(--red) 10%,var(--s1))}
 .hit .when{font-family:var(--f-mono);font-size:14px;grid-row:span 2}
 .hit .who{font-size:13px;color:var(--muted)}
-.legend{font-size:12px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 14px}
-.sizes{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
-.sizes span{font-size:13px;color:var(--muted);margin-right:4px}
-.sz{border:1px solid var(--line);background:var(--raise);border-radius:8px;padding:5px 11px;font-size:13px}
-.sz[aria-pressed="true"]{border-color:var(--blue);background:color-mix(in srgb,var(--blue) 28%,var(--raise))}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
-.card{border:2px solid var(--line);background:var(--raise);border-radius:12px;padding:0;overflow:hidden;display:flex;flex-direction:column;text-align:left;position:relative}
-.card img{width:100%;aspect-ratio:2/3;object-fit:cover;display:block;background:var(--line)}
-.card .cap{padding:6px 8px;font-size:13px;line-height:1.3;display:flex;flex-direction:column;gap:2px}
-.card .cap small{color:var(--muted);font-size:11px}
-.card[aria-pressed="true"]{border-color:var(--blue)}
-.card[aria-pressed="true"]::after{content:"✓";position:absolute;top:6px;right:6px;width:26px;height:26px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;font-weight:700}
-.grid.noimg .card img{display:none}
-.film .head{display:flex;gap:10px;align-items:center}
-.film .head img{width:calc(var(--pw,130px) * .45);aspect-ratio:2/3;object-fit:cover;border-radius:6px;flex:none;background:var(--line)}
-.film .head.noimg img{display:none}
-.credit{font-size:11px;color:var(--muted)}
-.ticketname{position:relative;display:flex;flex-direction:column;gap:4px;padding:16px 18px;border-radius:14px;cursor:text;
-  background:linear-gradient(135deg,color-mix(in srgb,var(--blue) 30%,var(--raise)),color-mix(in srgb,var(--violet) 22%,var(--raise)));
-  border:2px dashed color-mix(in srgb,var(--fg) 25%,transparent);
-  -webkit-mask:radial-gradient(circle 11px at 0 50%,#0000 98%,#000) left/51% 100% no-repeat,radial-gradient(circle 11px at 100% 50%,#0000 98%,#000) right/51% 100% no-repeat;
-  mask:radial-gradient(circle 11px at 0 50%,#0000 98%,#000) left/51% 100% no-repeat,radial-gradient(circle 11px at 100% 50%,#0000 98%,#000) right/51% 100% no-repeat}
-.tn-lab{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:color-mix(in srgb,var(--fg) 75%,transparent)}
-.ticketname input{background:none;border:0;padding:2px 0;font-size:28px;font-weight:800;letter-spacing:.01em;color:var(--fg)}
-.ticketname input::placeholder{color:color-mix(in srgb,var(--fg) 45%,transparent);font-weight:600}
-.ticketname input:focus-visible{outline:none}
-.ticketname:focus-within{border-style:solid;border-color:var(--blue)}
-.ticketname .tn-hint{font-size:12px;color:color-mix(in srgb,var(--fg) 70%,transparent)}
-[hidden]{display:none!important}
-details.cin>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;padding:10px 4px;border-bottom:1px solid var(--line);font-size:16px;font-weight:700}
-details.cin>summary::-webkit-details-marker{display:none}
-details.cin>summary::after{content:"▸";margin-left:auto;color:var(--muted);transition:transform .2s}
-details.cin[open]>summary::after{transform:rotate(90deg)}
-details.cin>summary i{width:11px;height:11px;border-radius:50%;display:inline-block}
-details.cin>summary small{font-weight:400;color:var(--muted);font-size:12px}
-details.cin[open]>.grid{margin-top:10px}
-.card{cursor:pointer;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;touch-action:manipulation}
-.card .pimg{position:relative;display:block}
-.card .cap b{text-decoration:underline;text-decoration-color:color-mix(in srgb,var(--fg) 30%,transparent);text-underline-offset:3px;cursor:pointer}
-.card[aria-pressed="true"]{border-color:var(--yellow)}
-.card[aria-pressed="true"]::after{content:"★";background:var(--yellow);color:#1a1300;font-size:16px}
-.burst{position:fixed;pointer-events:none;z-index:50;font-size:64px;transform:translate(-50%,-50%) scale(.2);animation:burst .7s ease-out forwards;text-shadow:0 0 18px color-mix(in srgb,var(--yellow) 80%,transparent)}
+.legend{font-size:11px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 14px}
+
+/* Overlays */
+.ov{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;padding:calc(20px + env(safe-area-inset-top,0px)) 20px calc(20px + env(safe-area-inset-bottom,0px))}
+.ov img.big{max-width:min(92vw,520px);max-height:84vh;border-radius:6px}
+.ov .info{background:var(--s1);border:1px solid var(--line);border-radius:10px;padding:18px;max-width:440px;width:100%;display:flex;flex-direction:column;gap:12px;max-height:86vh;overflow:auto}
+.ov .top{display:grid;grid-template-columns:90px 1fr;gap:12px;align-items:start}
+.ov .top img{width:90px;aspect-ratio:2/3;object-fit:cover;border-radius:4px}
+.ov .links{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ov .links a{display:flex;gap:8px;align-items:center;justify-content:center;text-decoration:none;color:var(--fg);background:var(--s2);border:1px solid var(--line);border-radius:8px;padding:10px;font-size:14px}
+.ov .links a.yt{border-color:var(--red)}
+.ov .close{align-self:flex-end;background:var(--s2);border-radius:999px;width:34px;height:34px;font-size:16px}
+.burst{position:fixed;pointer-events:none;z-index:50;font-size:64px;transform:translate(-50%,-50%) scale(.2);animation:burst .7s ease-out forwards}
 .burst.mini{font-size:22px;animation:fly .7s ease-out forwards}
 @keyframes burst{40%{transform:translate(-50%,-50%) scale(1.25);opacity:1}100%{transform:translate(-50%,-90%) scale(1);opacity:0}}
 @keyframes fly{0%{transform:translate(-50%,-50%) scale(.4);opacity:1}100%{transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1);opacity:0}}
-.ov{position:fixed;inset:0;z-index:40;background:rgba(5,7,10,.88);display:flex;align-items:center;justify-content:center;padding:calc(20px + env(safe-area-inset-top,0px)) 20px calc(20px + env(safe-area-inset-bottom,0px))}
-.ov img.big{max-width:min(92vw,520px);max-height:84vh;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
-.ov .info{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;max-width:440px;width:100%;display:flex;flex-direction:column;gap:12px;max-height:86vh;overflow:auto}
-.ov .info .top{display:grid;grid-template-columns:90px 1fr;gap:12px;align-items:start}
-.ov .info .top img{width:90px;aspect-ratio:2/3;object-fit:cover;border-radius:8px}
-.ov .links{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.ov .links a{display:flex;gap:8px;align-items:center;justify-content:center;text-decoration:none;color:var(--fg);background:var(--raise);border:1px solid var(--line);border-radius:10px;padding:10px;font-size:14px}
-.ov .links a.yt{border-color:#ff3b30}
-.ov .close{align-self:flex-end;border:0;background:var(--raise);border-radius:999px;width:34px;height:34px;font-size:16px}
 @media (prefers-reduced-motion:reduce){.burst{animation-duration:.01s}}
-input,select,textarea{box-sizing:border-box}
-.fside .times .t{min-width:84px;padding:5px 8px}
-.connect{border:1px dashed var(--blue);background:color-mix(in srgb,var(--blue) 12%,var(--raise));color:var(--fg);border-radius:10px;padding:7px 12px;font-size:13px}
-.connpanel{border:1px solid var(--blue);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:6px;font-size:14px;background:color-mix(in srgb,var(--blue) 8%,var(--surface))}
-.fside{display:grid;grid-template-columns:180px 1fr;gap:12px;align-items:start;border-top:1px solid var(--line);padding-top:12px}
-.fside:first-child{border-top:0;padding-top:0}
-.fside>img{width:100%;aspect-ratio:2/3;object-fit:cover;border-radius:8px;background:var(--line)}
-.fside .info{min-width:0;display:flex;flex-direction:column;gap:6px}
-.fside .bar{display:flex;gap:6px;flex-wrap:wrap}
-.cal{display:flex;flex-direction:column;gap:14px}
-.cal .dayh{font-weight:700;font-size:15px;border-bottom:1px solid var(--line);padding-bottom:4px;display:flex;justify-content:space-between}
-.cal .dayh small{font-weight:400;color:var(--muted)}
-.cal .slots{display:flex;flex-direction:column;gap:6px;margin-top:6px}
-.t2{display:grid;grid-template-columns:74px 34px 1fr;gap:10px;align-items:center;border:1px solid var(--line);background:var(--raise);border-radius:10px;padding:6px 10px;text-align:left}
-.t2 .h{font-family:var(--f-mono);font-size:16px}
-.t2 img{width:34px;aspect-ratio:2/3;object-fit:cover;border-radius:4px;background:var(--line)}
-.t2 .w{display:flex;flex-direction:column;font-size:13px;line-height:1.3;min-width:0}
-.t2 .w small{color:var(--muted);display:flex;gap:5px;align-items:center}
-.t2 .w small i{width:7px;height:7px;border-radius:50%;display:inline-block}
-.t2[aria-pressed="true"]{background:color-mix(in srgb,var(--green) 25%,var(--raise));border-color:var(--green)}
-.t2[aria-pressed="true"] .h::before{content:"✓ ";color:var(--green)}
-.filters{display:flex;flex-direction:column;gap:10px;border:1px solid var(--line);border-radius:12px;padding:10px}
-.seg{display:flex;gap:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;width:max-content;max-width:100%}
-.seg button{border:0;background:var(--raise);padding:7px 14px;font-size:13px}
-.seg button[aria-pressed="true"]{background:var(--blue);color:#fff}
-.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
-.lbl{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted)}
-.lbl small{font-size:11px}
-.langtog{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;width:max-content}
-.langtog button{border:0;background:var(--raise);padding:8px 16px;font-size:15px;font-weight:700;min-width:52px}
-.langtog button[aria-pressed="true"]{background:var(--blue);color:#fff}
-.search{display:flex;align-items:center;gap:8px;background:var(--raise);border:1px solid var(--line);border-radius:10px;padding:0 12px}
-.search input{border:0;background:none;padding:10px 0}
-.search input:focus-visible{outline:none}.search:focus-within{border-color:var(--blue)}
-.fsec{border:1px solid var(--line);border-radius:10px;background:var(--surface)}
-.fsec>summary{list-style:none;cursor:pointer;padding:10px 12px;display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600}
-.fsec>summary::-webkit-details-marker{display:none}
-.fsec>summary::after{content:"▸";color:var(--muted);transition:transform .2s}
-.fsec[open]>summary::after{transform:rotate(90deg)}
-.fsec .fval{margin-left:auto;font-weight:400;color:var(--muted);font-size:13px}
-.fsec>:not(summary){margin:0 12px 12px}
-.fsec[open]{display:flex;flex-direction:column;gap:8px}
-.tgroups{display:flex;flex-direction:column;gap:6px}
-.tg{display:grid;grid-template-columns:1fr auto;gap:6px;align-items:center}
-.tg .main{display:flex;align-items:center;gap:10px;border:1px solid var(--line);background:var(--raise);border-radius:10px;padding:8px 12px;text-align:left}
-.tg .main b{font-size:14px}.tg .main small{color:var(--muted);font-size:12px;margin-left:auto;font-family:var(--f-mono)}
-.tg .main[aria-pressed="true"]{border-color:var(--blue);background:color-mix(in srgb,var(--blue) 28%,var(--raise))}
-.tg .main[aria-pressed="mixed"]{border-color:var(--blue);border-style:dashed}
-.tg .more{border:1px solid var(--line);background:var(--raise);border-radius:10px;width:40px;height:100%}
-.tg .times{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px;padding-left:6px}
-.timechips{display:flex;flex-wrap:wrap;gap:6px}
-.timechips button{border:1px solid var(--line);background:var(--raise);border-radius:8px;padding:5px 9px;font-family:var(--f-mono);font-size:13px}
-.timechips button[aria-pressed="true"]{border-color:var(--blue);background:color-mix(in srgb,var(--blue) 28%,var(--raise))}
-.fgrid label{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--muted)}
-select{background:var(--raise);border:1px solid var(--line);border-radius:10px;padding:9px 10px;color:var(--fg);font:inherit;font-size:14px;width:100%}
-.cin{display:flex;flex-direction:column;gap:10px;margin-top:6px}
-.cin h3{margin:0;font-size:16px;display:flex;align-items:center;gap:8px}
-.cin h3 i{width:11px;height:11px;border-radius:50%;display:inline-block}
-.cin h3 small{font-weight:400;color:var(--muted);font-size:12px}
-.togc{border:1px solid var(--line);background:var(--raise);border-radius:999px;padding:6px 12px;font-size:13px;display:inline-flex;gap:6px;align-items:center}
-.togc i{width:8px;height:8px;border-radius:50%;display:inline-block}
-.togc[aria-pressed="false"]{opacity:.4;text-decoration:line-through}
-.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--raise);border:1px solid var(--line);border-radius:999px;padding:8px 16px;font-size:13px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--s2);border:1px solid var(--line);border-radius:999px;padding:8px 16px;font-size:13px;z-index:60}
 </style>
 
 <div class="app">
   <header>
-    <h1>Kinobande<small>Kiwi Center · Kiwi Loge · Maxx · Cameo – Programm vom 14.11.2026</small></h1>
+    <div class="tt">
+      <h1>Kino<span>-</span>Programm</h1>
+      <p class="sub" id="sub"></p>
+    </div>
+    <label class="search"><span aria-hidden="true">🔍</span><input id="fQ" placeholder="Suchen" aria-label="Film suchen" enterkeyhint="search"></label>
   </header>
 
-  <section>
-    <h2><span class="n">1</span>Wer bist du?</h2>
-    <label class="ticketname" for="nameIn">
-      <span class="tn-lab">Ticket für</span>
-      <input id="nameIn" maxlength="20" placeholder="Tippe deinen Namen …" autocomplete="given-name" enterkeyhint="done">
-      <span class="tn-hint" id="nameHint">Dein Name erscheint in der Nachricht an die Gruppe.</span>
-    </label>
-  </section>
+  <details class="sec" data-sec="1" open>
+    <summary><span class="n">1</span><h2>Wer bist du?</h2></summary>
+    <div class="body">
+      <label class="ticket" for="nameIn">
+        <span class="lab">Ticket für</span>
+        <input id="nameIn" maxlength="20" placeholder="Dein Name" autocomplete="given-name" enterkeyhint="done">
+        <span class="hint" id="nameHint"></span>
+      </label>
+    </div>
+  </details>
 
-  <section>
-    <h2><span class="n">2</span>Welche Filme willst du sehen?</h2>
-    <p class="muted">Doppelt auf ein Poster tippen = Film favorisieren ⭐. Einmal tippen = Poster gross. Auf den Titel tippen = Infos und Trailer.</p>
-    <div class="filters">
+  <details class="sec" data-sec="2" open>
+    <summary><span class="n">2</span><h2>Welche Filme?</h2><span class="hint">double tap for ⭐</span></summary>
+    <div class="body">
       <div class="seg" id="viewSeg"></div>
-      <label class="search"><span aria-hidden="true">🔍</span><input id="fQ" placeholder="Film suchen …" aria-label="Film suchen"></label>
-      <details class="fsec" data-fs="kino"><summary>🎦 Kinos <span class="fval" id="vCin"></span></summary><div class="chips" id="cinF"></div></details>
-      <details class="fsec" data-fs="lang"><summary>🗣️ Sprache <span class="fval" id="vLang"></span></summary><div class="langtog" id="fLang"><button data-l="d" title="Deutsch">DE</button><button data-l="o" title="Originalsprache mit Untertiteln">🌐</button></div><small class="muted">DE = Deutsch, 🌐 = Originalsprache mit Untertiteln</small></details>
-      <details class="fsec" data-fs="zeit"><summary>🕘 Startzeit <span class="fval" id="vTime"></span></summary><div class="tgroups" id="fTimes"></div><small class="muted">Tippe eine Tageszeit an, um sie ein- oder auszuschliessen; mit ▸ siehst du die einzelnen Startzeiten.</small></details>
-      <div class="row"><span class="muted" id="fCount"></span><button class="sz" id="fReset">Filter zurücksetzen</button></div>
+      <details class="filt" id="filt">
+        <summary>Filter <b id="fSum"></b></summary>
+        <div class="fbody">
+          <div><div class="flab">Kino · zu Fuss ab Bahnhof Winterthur</div><div class="cinrow" id="cinF"></div></div>
+          <div><div class="flab">Startzeit</div><div class="trow" id="fTimes"></div></div>
+          <div class="frow"><span class="muted" id="fCount"></span><button class="lnk" id="fReset">Zurücksetzen</button></div>
+        </div>
+      </details>
+      <button class="colall" id="collapseAll">Alle Kinos zuklappen</button>
+      <div id="films"></div>
+      <p class="credit">Plakate: Cineman, TMDB und Veranstalter · Kinofotos: Wikimedia Commons (Roland zh, Kulmalukko, CC BY-SA 3.0) und Kino Cameo. This product uses the TMDB API but is not endorsed or certified by TMDB.</p>
     </div>
-    <div class="row"><button class="sz" id="collapseAll" style="margin-left:auto">Alle zuklappen</button></div>
-    <div id="films"></div>
-    <p class="credit">Bilder: Cineman und TMDB (This product uses the TMDB API but is not endorsed or certified by TMDB.)</p>
-  </section>
+  </details>
 
-  <section>
-    <h2><span class="n">3</span>Wann kannst du?</h2>
-    <p class="muted">Tippe bei deinen Filmen jede Vorstellung an, an der du Zeit hast. Am besten zu Monatsbeginn oder sobald das neue Programm steht.</p>
-    <div class="row"><div class="seg" id="showSeg"></div><button class="connect" id="connBtn">🔗 Mit Kalender / Claude / ChatGPT verbinden</button></div>
-    <div class="connpanel" id="connPanel" hidden>
-      <b>Bald: Termine automatisch finden</b>
-      <p>Später kann hier jeder seinen Kalender oder seine KI (Claude, ChatGPT) verbinden.</p>
-      <p>Dann gleichen die KIs eure Kalender selbst ab und schlagen Vorstellungen vor, die allen passen, ohne dass jemand planen muss.</p>
-      <p class="muted">Bis dahin: Zeiten unten von Hand an- und abklicken.</p>
+  <details class="sec" data-sec="3" open>
+    <summary><span class="n">3</span><h2>Wann kannst du?</h2></summary>
+    <div class="body">
+      <div class="seg" id="showSeg"></div>
+      <div id="shows"><p class="muted">Zuerst oben einen Film doppelt antippen.</p></div>
+      <div class="legend"><span>DE = Deutsch</span><span>OV = Originalsprache mit Untertiteln (z. B. E/d = Englisch, deutsche Untertitel)</span><span>Balken = Film von Beginn bis ca. Ende, Achse 10–24 Uhr</span></div>
+      <button class="connect" id="connBtn">🔗 Mit Kalender / Claude / ChatGPT verbinden</button>
+      <div class="connpanel" id="connPanel" hidden>
+        <b>Bald: Termine automatisch finden</b>
+        <p>Später verbindet hier jeder seinen Kalender oder seine KI (Claude, ChatGPT), und die KIs schlagen Vorstellungen vor, die allen passen.</p>
+        <p class="muted">Bis dahin: Zeiten oben von Hand an- und abklicken.</p>
+      </div>
     </div>
-    <div id="shows"><p class="muted">Wähle zuerst oben mindestens einen Film.</p></div>
-    <div class="legend"><span>D = Deutsch</span><span>E/d = Englisch, deutsche Untertitel</span><span>E/df = Englisch, deutsch-französische Untertitel</span></div>
-  </section>
+  </details>
 
-  <section>
-    <h2><span class="n">4</span>In die WhatsApp-Gruppe schicken</h2>
-    <pre id="out">Noch nichts gewählt.</pre>
-    <div class="row"><button class="btn" id="copy">Text kopieren</button><span class="muted" id="cnt"></span></div>
-  </section>
+  <details class="sec" data-sec="4" open>
+    <summary><span class="n">4</span><h2>In die Gruppe schicken</h2></summary>
+    <div class="body">
+      <pre id="out">Noch nichts gewählt.</pre>
+      <div class="row"><button class="btn" id="copy">Text kopieren</button><span class="muted" id="cnt"></span></div>
+    </div>
+  </details>
 
-  <section>
-    <h2><span class="n">5</span>Wann passt es allen?</h2>
-    <p class="muted">Kopiere die Nachrichten der anderen aus WhatsApp und füge sie hier ein. Deine eigene Wahl zählt automatisch mit.</p>
-    <textarea id="paste" placeholder="Hier die Nachrichten der anderen einfügen …"></textarea>
-    <div id="hits"></div>
-  </section>
+  <details class="sec" data-sec="5" open>
+    <summary><span class="n">5</span><h2>Wann passt es allen?</h2></summary>
+    <div class="body">
+      <p class="muted">Nachrichten der anderen aus WhatsApp hier einfügen. Deine eigene Wahl zählt automatisch mit.</p>
+      <textarea id="paste" placeholder="Hier einfügen …"></textarea>
+      <div id="hits"></div>
+    </div>
+  </details>
 </div>
 <div id="ov" class="ov" hidden></div>
 
 <script>
-const DATA={"f": [["Der frechste Troll der Welt", "Trickfilm, Familienfilm, Fantasy", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/65baf88bb53cb235514337b53531e0d8d140c261.jpg", "https://www.cineman.ch/movie/2026/KrolleBolle/"], ["Pumuckl und das grosse Missverständnis", "Abenteuer, Trickfilm, Familienfilm, Komödie", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/1c0c613faaf28b61986036580a1f0be6e52585f3.jpg", "https://www.cineman.ch/movie/2025/PumucklUndDasGrosseMissverstaendnis/"], ["Die Odyssee", "Action, Abenteuer, Fantasy, Geschichte", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/4315522bd4d4de6eeaf6f35979f09cf5fe9d2a60.jpg", "https://www.cineman.ch/movie/2026/TheOdyssey/"], ["From Inside Out - Die Architektur von Peter Zumthor", "Dokumentation", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/16fb6f202ed32dd69b4d6b1735f7fbb5bfb5763c.jpg", "https://www.cineman.ch/movie/2026/FromInsideOutTheArchitectureOfPeterZumthor/"], ["Ebenezer - Eine Weihnachtsgeschichte", "Fantasy", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/5de4ae59b2a48401c31010305ff255eb9dee7d3c.jpg", "https://www.cineman.ch/movie/2026/EbenezerAChristmasCarol/"], ["How to Rob A Bank", "Action, Krimi, Thriller", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/08827c3fb8aa1c78e7eb15f414aa617df3ec0a9b.jpg", "https://www.cineman.ch/movie/2026/HowToRobABank/"], ["George Michael: The Faith Tour", "Musikfilm, Musical", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/26767261103c3d181a41411f188afaf36a26bd9d.jpg", "https://www.cineman.ch/movie/2026/GeorgeMichaelTheFaithTour/"], ["Wild Horse Nine", "Krimi, Drama, Thriller", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/f636c69544abb7e4a0c83cb82513561389b814a2.jpg", "https://www.cineman.ch/movie/2026/WildHorseNine/"], ["A Talent for Murder", "Krimi, Drama, Thriller", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/8b0791caeb9b11cb4f21a36fe5da6f12524e1d94.jpg", "https://www.cineman.ch/movie/2026/ATalentForMurder/"], ["Der perfekte Urlaub", "Komödie, Drama, Liebesfilm", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/d5f43867b86a705cf66042a5d2496d740191548f.jpg", "https://www.cineman.ch/movie/2026/DerPerfekteUrlaub/"], ["Godzilla Minus Zero", "Action, Abenteuer, Drama", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/4f1f636faec3e4a02cc00b74d4a4daf731e87417.jpg", "https://www.cineman.ch/movie/2026/GodzillaMinusZero/"], ["Wildwood", "Abenteuer, Trickfilm, Drama", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/7f07139d7c6b984371e695d2c2c6aceb10d876d1.jpg", "https://www.cineman.ch/movie/2026/Wildwood/"], ["NAZA", "Dokumentation, Krieg", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/e5af424a7be07c401366cc68b3fa9f6ef39c5bcd.jpg", "https://www.cineman.ch/movie/2026/NAZA/"], ["Eiserne Wildnis - Heart Of The Beast", "Action, Abenteuer, Drama", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/01c8cc85d5229e40b92151632f9164ce73d6d441.jpg", "https://www.cineman.ch/movie/2026/HeartOfTheBeast/"], ["Je so' pazzo", "", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/a21421a591e3529013415592ca2d40da0a3d8b19.jpg", "https://www.cineman.ch/movie/2026/JeSoPazzo/"], ["Clayface", "Action, Abenteuer, Fantasy, Horror, Thriller", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/0616b78a994deee76b20379b9caeb615d040dd09.jpg", "https://www.cineman.ch/movie/2026/Clayface/"], ["Resident Evil", "Horror", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/e820d89155a036506d1564cc8710586c2f2a296e.jpg", "https://www.cineman.ch/movie/2026/ResidentEvil/"], ["La vita da grandi (Das Leben als Erwachsene)", "Programmkino", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/70d6ebeea70db9bc3fc503fae8b387e39d2c9925.jpg", "https://www.kinocameo.ch/film/la-vita-da-grandi-das-leben-als-erwachsene"], ["Heimsuchung", "Drama, Geschichte", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/36564b2b3a9eb0190a2ef1fc7bc50d1d89c219b7.jpg", "https://www.cineman.ch/movie/2026/Heimsuchung/"], ["Gentle Monster", "Drama, Thriller", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/77e508e6f97381fc2de7de8565343a5dcd508c72.jpg", "https://www.cineman.ch/movie/2026/GentleMonster/"], ["Frank & Louis", "Drama", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/ae8e28525a6149e1089d2a17ea74113ae5481ee5.jpg", "https://www.cineman.ch/movie/2025/FrankLouis/"], ["Verity - Dunkle Geheimnisse", "Krimi, Drama, Mystery, Liebesfilm, Thriller", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/e3e175ed575becbde90432df8a382b3afe527f09.jpg", "https://www.cineman.ch/movie/2026/Verity/"], ["Obsession - Du sollst mich lieben", "Horror", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/e2cf7a7eaf2d094a420559ee31c557bfe215578c.jpg", "https://www.cineman.ch/movie/2025/Obsession/"], ["Other Mommy", "Horror", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/337994f90dd0984e6957fe798f7fe3e1916a39c3.jpg", "https://www.cineman.ch/movie/2026/OtherMommy/"], ["Heimsuchung – Eine Jahrhundertgeschichte", "Programmkino", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/36564b2b3a9eb0190a2ef1fc7bc50d1d89c219b7.jpg", "https://www.kinocameo.ch/film/heimsuchung-eine-jahrhundertgeschichte"], ["Christine", "Programmkino", "https://media.themoviedb.org/t/p/w342/EubyWdkj3wTvXkvZwLCiNUgOx5.jpg", "https://www.kinocameo.ch/film/christine"], ["Auf der Suche nach der Weihnachtswerkstatt", "Trickfilm, Familienfilm, Komödie", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/ed81a4192b8f0a56de00848ea9b9b45eca5c922b.jpg", "https://www.cineman.ch/movie/2026/JulenissensVerksted/"], ["Shaun das Schaf - Spuk im Kürbisfeld", "Abenteuer, Trickfilm, Komödie", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/582abdddb515cab204ba32afdcee204e7234afdf.jpg", "https://www.cineman.ch/movie/2025/ShaunTheSheepTheBeastOfMossyBottom/"], ["Minions & Monster", "Abenteuer, Trickfilm, Komödie", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/743e5b81d8f9358c8867f6fd4a28558b887e6e7a.jpg", "https://www.cineman.ch/movie/2027/MinionsMonsters/"], ["Orwell: 2+2=5", "Dokumentation, Geschichte", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/7d972db6e32000def569a153ed3ff57eeb969a18.jpg", "https://www.cineman.ch/movie/2025/Orwell225/"], ["Mumbo Jumbo", "Trickfilm, Familienfilm, Fantasy", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/576ffafe017e116b6159ea04dad5ed028e42e42a.jpg", "https://www.cineman.ch/movie/2026/MumboJumbo/"], ["Der Regenbogenfisch", "Trickfilm, Familienfilm", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/e28535f13277050e0d92ca2e4cb56db8edeb653a.jpg", "https://www.cineman.ch/movie/2026/DerRegenbogenfisch/"], ["Paw Patrol: Der Dino Film", "Trickfilm", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/0d21aaeeb0cca65f1e5da51528ef5012c3a4d0fe.jpg", "https://www.cineman.ch/movie/2026/PawPatrolTheDinoMovie/"], ["Spider-Man: Brand New Day", "Action", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/f7f7d99f101bfa7496fb00842ef0a60e877c6adf.jpg", "https://www.cineman.ch/movie/2026/SpiderManBrandNewDay/"], ["Glennkill: Ein Schafskrimi", "Action, Komödie, Mystery", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/3b52e88bbeb9ac5d48f7792e9842f53b52b5be1f.jpg", "https://www.cineman.ch/movie/2026/TheSheepDetectives/"], ["Emil und die Detektive", "Familienfilm", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/666088073e6993b1b062470c4f8bc7ea4b90af8c.jpg", "https://www.cineman.ch/movie/2026/EmilUndDieDetektive/"], ["Lieblingsmenschen", "Komödie, Drama", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/27fa827773a9d36525b4ddb175c3664ffbc272d3.jpg", "https://www.cineman.ch/movie/2026/Lieblingsmenschen/"], ["From Ground Zero – Filmtour 2026", "Programmkino", "https://media.themoviedb.org/t/p/w342/fa1awdcPtuKEIpQNM4AKu9vCPQh.jpg", "https://www.kinocameo.ch/film/ground-zero-filmtour-2026"], ["Ramayana: Rise of a Legend", "Action, Abenteuer, Drama", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/06b26924d1d5fc16a2734ca31c310d38820c5016.jpg", "https://www.cineman.ch/movie/2026/RamayanaRiseOfALegend/"], ["Gioia mia (Mein Sommer mit Nonna)", "Programmkino", "https://media.themoviedb.org/t/p/w342/AhPhgTtPfxxek62PdeuXOObBUNX.jpg", "https://www.kinocameo.ch/film/gioia-mia-mein-sommer-mit-nonna"], ["Geister", "Drama, Liebesfilm", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/bf02f78c2ca428170e75f15c7466ebea6e263f24.jpg", "https://www.cineman.ch/movie/2026/Geister/"], ["Die Tribute von Panem - Sunrise on the Reaping", "Action, Abenteuer, Fantasy, Science Fiction, Thriller", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/9d7c09aac4248b126952776111be772ae4541031.jpg", "https://www.cineman.ch/movie/2026/TheHungerGamesSunriseOnTheReaping/"], ["Dekalog 9 und 10", "Programmkino", "https://media.themoviedb.org/t/p/w342/9walZQzHStoe38bEJv4AJbcV56K.jpg", "https://www.kinocameo.ch/film/dekalog-9-und-10"], ["Bibi Blocksberg - Die total verhexte Zeitreise", "Abenteuer", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/accc6f60c127553656c46812a9a75691129f8569.jpg", "https://www.cineman.ch/movie/2025/BibiBlocksbergDieTotalVerhexteZeitreise/"], ["From Inside Out – Die Architektur von Peter Zumthor", "Programmkino", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/16fb6f202ed32dd69b4d6b1735f7fbb5bfb5763c.jpg", "https://www.kinocameo.ch/film/inside-out-die-architektur-von-peter-zumthor"], ["Imagine Peace", "Programmkino", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/7d678a89c269f72feb89533eb5e64155909172e6.jpg", "https://www.kinocameo.ch/film/imagine-peace"], ["The Loneliest Man in Town", "Programmkino", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/37fbff4a51e3fa24078ae82ce4033b2b82750803.jpg", "https://www.kinocameo.ch/film/loneliest-man-town"], ["Wenn die Erinnerung verblasst", "Programmkino", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/2f283f7744428ab0cab00899db49f553c977a6f9.jpg", "https://www.kinocameo.ch/film/wenn-die-erinnerung-verblasst"], ["Kleine Laterne – Gefühle", "Programmkino", "", "https://www.kinocameo.ch/film/kleine-laterne-gefuehle-0"], ["Die rote Zora", "Programmkino", "https://media.themoviedb.org/t/p/w342/osynXqoG8YpUaMybdsY2Rw5xRzV.jpg", "https://www.kinocameo.ch/film/die-rote-zora"], ["Tre ciotole (Drei Abschiede)", "Programmkino", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/a2263924870b58bca941c5756bbd3591cbceaa5c.jpg", "https://www.kinocameo.ch/film/tre-ciotole-drei-abschiede"], ["Congo Boy", "Programmkino", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/8586811c59d802988f49938a53f9f54ed63f27aa.jpg", "https://www.kinocameo.ch/film/congo-boy"], ["Enjoy Your Stay", "Programmkino", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/9a84ac43900845d2229265a428f46fd61493077f.jpg", "https://www.kinocameo.ch/film/enjoy-your-stay"], ["Gruppo di famiglia in un interno (Gewalt und Leidenschaft)", "Programmkino", "https://media.themoviedb.org/t/p/w342/r7Dhjs8xbCCjOY2X9xu3eQpPVes.jpg", "https://www.kinocameo.ch/film/gruppo-di-famiglia-un-interno-gewalt-und-leidenschaft"], ["Was an Empfindsamkeit bleibt", "Programmkino", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/9769bf3ed3785a5844ea9a8146f9105f36fe0671.jpg", "https://www.kinocameo.ch/film/was-empfindsamkeit-bleibt"], ["La strada", "Programmkino", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/c60b266d8751ea17c9afd1ac10c0cadf6b111f9e.jpg", "https://www.kinocameo.ch/film/la-strada"], ["Gabin", "Programmkino", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/7638151297bd45e6696ee3bd269c23a5f3d3d88b.jpg", "https://www.kinocameo.ch/film/gabin"], ["Histoires parallèles", "Programmkino", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/4256ff5e0dad7d9e264a8ad5b0a0638b56447088.jpg", "https://www.kinocameo.ch/film/histoires-paralleles"], ["Eifach machä – Eidberger Openair, der Film", "Programmkino", "", "https://www.kinocameo.ch/film/eifach-machae-eidberger-openair-der-film"], ["Was haben wir gelacht", "Programmkino", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/6245bfc2796cd329cffa82af5e4e2e9f25dbd575.jpg", "https://www.kinocameo.ch/film/was-haben-wir-gelacht"], ["Prinzessin Mononoke (Mononoke-hime) – Re-Release", "Programmkino", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/6ed9b699d1a6536df45d018a9fc0ac5ccc85980a.jpg", "https://www.kinocameo.ch/film/prinzessin-mononoke-mononoke-hime-re-release"], ["The Pink Panther", "Programmkino", "https://media.themoviedb.org/t/p/w342/tiJTZDKN0urz7seqF20AHoSHKG8.jpg", "https://www.kinocameo.ch/film/pink-panther"], ["Anders anders – Was uns verbindet", "Programmkino", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/56645d060a4fb7d62c23ea9b56a477ccb02c739a.jpg", "https://www.kinocameo.ch/film/anders-anders-was-uns-verbindet"], ["Minotaur", "Programmkino", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/3f504dbebcfeb0011a41928fcd9c506f223ed48e.jpg", "https://www.kinocameo.ch/film/minotaur"], ["Mein Freund Barry", "Programmkino", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/41dc573f53987c1250b8d60f2033385bca203680.jpg", "https://www.kinocameo.ch/film/mein-freund-barry"], ["Buure", "Programmkino", "https://media.services.cinergy.ch/media/cinemanteaser174x240x2/b242a3469a49ee04068ffabff316d947d4722740.jpg", "https://www.kinocameo.ch/film/buure"], ["Best-of Int. Kurzfilmtage Winterthur 2026", "Programmkino", "", "https://www.kinocameo.ch/film/best-int-kurzfilmtage-winterthur-2026"]], "s": [[0, 2, "11-14", "15:55", "D", "Saal 3", ""], [1, 3, "11-14", "16:45", "", "", ""], [2, 0, "11-14", "16:45", "E/df", "Saal 9", ""], [3, 1, "11-14", "17:00", "O/df", "Saal 2", ""], [4, 2, "11-14", "17:00", "E/df", "Saal 1", ""], [5, 2, "11-14", "17:00", "D", "Saal 5", ""], [4, 0, "11-14", "17:15", "D", "Saal 1", ""], [6, 0, "11-14", "17:15", "E/d", "Saal 4", ""], [5, 0, "11-14", "17:15", "D", "Saal 10", ""], [7, 0, "11-14", "17:15", "D", "Saal 6", ""], [8, 1, "11-14", "17:15", "E/df", "Saal 3", ""], [9, 2, "11-14", "17:15", "D", "Saal 6", ""], [10, 0, "11-14", "17:30", "D", "Saal 5", ""], [11, 0, "11-14", "17:30", "E/d", "Saal 2", ""], [12, 1, "11-14", "17:30", "O/de", "Saal 1", ""], [9, 0, "11-14", "17:45", "D", "Saal 7", ""], [13, 0, "11-14", "17:45", "D", "Saal 8", ""], [14, 0, "11-14", "18:00", "I", "Saal 3", ""], [15, 2, "11-14", "18:00", "D", "Saal 2", ""], [6, 2, "11-14", "18:10", "E/d", "Saal 3", ""], [16, 2, "11-14", "18:15", "D", "Saal 4", ""], [17, 3, "11-14", "19:00", "", "", "Einführung von der Società Dante Alighieri"], [18, 1, "11-14", "19:30", "D", "Saal 1", ""], [19, 1, "11-14", "19:45", "D", "Saal 3", ""], [9, 0, "11-14", "20:00", "D", "Saal 1", ""], [4, 0, "11-14", "20:00", "D", "Saal 10", ""], [7, 0, "11-14", "20:00", "E/df", "Saal 6", ""], [20, 1, "11-14", "20:00", "D", "Saal 2", ""], [4, 2, "11-14", "20:00", "D", "Saal 1", ""], [5, 2, "11-14", "20:00", "D", "Saal 5", ""], [5, 0, "11-14", "20:15", "E/df", "Saal 4", ""], [21, 0, "11-14", "20:15", "D", "Saal 8", ""], [9, 2, "11-14", "20:15", "D", "Saal 6", ""], [4, 0, "11-14", "20:30", "E/df", "Saal 2", ""], [5, 0, "11-14", "20:30", "D", "Saal 7", ""], [22, 0, "11-14", "20:30", "D", "Saal 5", ""], [23, 0, "11-14", "20:30", "D", "Saal 9", ""], [10, 2, "11-14", "20:30", "D", "Saal 4", ""], [7, 2, "11-14", "20:45", "D", "Saal 2", ""], [23, 2, "11-14", "21:00", "D", "Saal 3", ""], [24, 3, "11-14", "21:15", "", "", ""], [25, 3, "11-14", "23:30", "", "", ""], [26, 2, "11-15", "10:00", "D", "Saal 5", ""], [0, 2, "11-15", "10:00", "D", "Saal 3", ""], [27, 2, "11-15", "10:10", "D", "Saal 6", ""], [4, 2, "11-15", "10:30", "D", "Saal 1", ""], [28, 2, "11-15", "11:00", "D", "Saal 4", ""], [29, 3, "11-15", "12:00", "", "", ""], [4, 2, "11-15", "12:05", "D", "Saal 5", ""], [6, 2, "11-15", "12:15", "E/d", "Saal 3", ""], [30, 2, "11-15", "12:25", "D", "Saal 6", ""], [31, 0, "11-15", "13:00", "CH", "Saal 7", ""], [0, 0, "11-15", "13:00", "D", "Saal 6", ""], [14, 0, "11-15", "13:00", "I", "Saal 3", ""], [32, 0, "11-15", "13:00", "D", "Saal 8", ""], [26, 0, "11-15", "13:15", "D", "Saal 4", ""], [27, 0, "11-15", "13:15", "D", "Saal 10", ""], [33, 0, "11-15", "13:30", "D", "Saal 9", ""], [9, 2, "11-15", "13:30", "D", "Saal 1", ""], [4, 2, "11-15", "13:30", "D", "Saal 4", ""], [3, 1, "11-15", "14:00", "O/df", "Saal 2", ""], [31, 2, "11-15", "14:00", "CH", "Saal 2", ""], [34, 0, "11-15", "14:15", "D", "Saal 5", ""], [11, 0, "11-15", "14:15", "D", "Saal 2", ""], [8, 1, "11-15", "14:15", "D", "Saal 3", ""], [12, 3, "11-15", "14:30", "", "", ""], [4, 0, "11-15", "14:30", "D", "Saal 1", ""], [18, 1, "11-15", "14:30", "D", "Saal 1", ""], [27, 2, "11-15", "14:45", "D", "Saal 6", ""], [26, 2, "11-15", "14:55", "D", "Saal 5", ""], [0, 0, "11-15", "15:00", "D", "Saal 6", ""], [9, 0, "11-15", "15:00", "D", "Saal 7", ""], [0, 2, "11-15", "15:05", "D", "Saal 3", ""], [26, 0, "11-15", "15:15", "D", "Saal 4", ""], [35, 0, "11-15", "15:15", "D", "Saal 8", ""], [27, 0, "11-15", "15:15", "D", "Saal 10", ""], [14, 0, "11-15", "15:30", "I", "Saal 3", ""], [10, 2, "11-15", "16:15", "D", "Saal 4", ""], [5, 2, "11-15", "16:15", "D", "Saal 2", ""], [2, 0, "11-15", "16:45", "E/df", "Saal 9", ""], [4, 2, "11-15", "16:45", "D", "Saal 1", ""], [3, 1, "11-15", "17:00", "O/df", "Saal 2", ""], [9, 2, "11-15", "17:00", "D", "Saal 6", ""], [36, 2, "11-15", "17:00", "D", "Saal 5", ""], [4, 0, "11-15", "17:15", "D", "Saal 1", ""], [6, 0, "11-15", "17:15", "E/d", "Saal 4", ""], [5, 0, "11-15", "17:15", "D", "Saal 10", ""], [7, 0, "11-15", "17:15", "D", "Saal 6", ""], [8, 1, "11-15", "17:15", "E/df", "Saal 3", ""], [21, 2, "11-15", "17:15", "D", "Saal 3", ""], [10, 0, "11-15", "17:30", "D", "Saal 5", ""], [11, 0, "11-15", "17:30", "E/d", "Saal 2", ""], [12, 1, "11-15", "17:30", "O/de", "Saal 1", ""], [9, 0, "11-15", "17:45", "D", "Saal 7", ""], [13, 0, "11-15", "17:45", "D", "Saal 8", ""], [14, 0, "11-15", "18:00", "I", "Saal 3", ""], [37, 3, "11-15", "18:30", "", "", "Diskussionsrunde mit Marcus Bachmann (Ärzte ohne G"], [38, 2, "11-15", "19:15", "D", "Saal 4", ""], [18, 1, "11-15", "19:30", "D", "Saal 1", ""], [7, 2, "11-15", "19:30", "E/df", "Saal 2", ""], [19, 1, "11-15", "19:45", "D", "Saal 3", ""], [9, 2, "11-15", "19:45", "D", "Saal 5", ""], [4, 2, "11-15", "19:45", "E/df", "Saal 1", ""], [9, 0, "11-15", "20:00", "D", "Saal 1", ""], [4, 0, "11-15", "20:00", "D", "Saal 10", ""], [7, 0, "11-15", "20:00", "E/df", "Saal 6", ""], [20, 1, "11-15", "20:00", "D", "Saal 2", ""], [5, 2, "11-15", "20:00", "D", "Saal 6", ""], [23, 2, "11-15", "20:05", "D", "Saal 3", ""], [5, 0, "11-15", "20:15", "E/df", "Saal 4", ""], [21, 0, "11-15", "20:15", "D", "Saal 8", ""], [4, 0, "11-15", "20:30", "E/df", "Saal 2", ""], [5, 0, "11-15", "20:30", "D", "Saal 7", ""], [22, 0, "11-15", "20:30", "D", "Saal 5", ""], [23, 0, "11-15", "20:30", "D", "Saal 9", ""], [9, 0, "11-16", "14:00", "D", "Saal 7", ""], [33, 0, "11-16", "14:00", "D", "Saal 9", ""], [20, 1, "11-16", "14:00", "D", "Saal 2", ""], [4, 2, "11-16", "14:00", "D", "Saal 1", ""], [38, 2, "11-16", "14:00", "D", "Saal 4", ""], [34, 0, "11-16", "14:15", "D", "Saal 5", ""], [11, 0, "11-16", "14:15", "D", "Saal 2", ""], [8, 1, "11-16", "14:15", "D", "Saal 3", ""], [0, 2, "11-16", "14:15", "D", "Saal 3", ""], [4, 0, "11-16", "14:30", "D", "Saal 1", ""], [18, 1, "11-16", "14:30", "D", "Saal 1", ""], [26, 2, "11-16", "14:30", "D", "Saal 5", ""], [27, 2, "11-16", "14:45", "D", "Saal 6", ""], [35, 0, "11-16", "15:00", "D", "Saal 8", ""], [3, 0, "11-16", "15:00", "O/d", "Saal 3", ""], [26, 0, "11-16", "15:15", "D", "Saal 4", ""], [0, 0, "11-16", "15:15", "D", "Saal 6", ""], [27, 0, "11-16", "15:15", "D", "Saal 10", ""], [9, 0, "11-16", "17:00", "D", "Saal 7", ""], [3, 1, "11-16", "17:00", "O/df", "Saal 2", ""], [4, 2, "11-16", "17:00", "E/df", "Saal 1", ""], [5, 2, "11-16", "17:00", "D", "Saal 5", ""], [11, 2, "11-16", "17:00", "D", "Saal 3", ""], [4, 0, "11-16", "17:15", "D", "Saal 1", ""], [6, 0, "11-16", "17:15", "E/d", "Saal 4", ""], [5, 0, "11-16", "17:15", "D", "Saal 10", ""], [2, 0, "11-16", "17:15", "E/df", "Saal 9", ""], [7, 0, "11-16", "17:15", "D", "Saal 6", ""], [8, 1, "11-16", "17:15", "E/df", "Saal 3", ""], [9, 2, "11-16", "17:15", "D", "Saal 6", ""], [13, 0, "11-16", "17:30", "D", "Saal 8", ""], [10, 0, "11-16", "17:30", "D", "Saal 5", ""], [11, 0, "11-16", "17:30", "E/d", "Saal 2", ""], [12, 1, "11-16", "17:30", "O/de", "Saal 1", ""], [5, 2, "11-16", "17:30", "D", "Saal 4", ""], [7, 2, "11-16", "17:30", "E/df", "Saal 2", ""], [14, 0, "11-16", "17:45", "I", "Saal 3", ""], [29, 3, "11-16", "19:00", "", "", ""], [18, 1, "11-16", "19:30", "D", "Saal 1", ""], [19, 1, "11-16", "19:45", "D", "Saal 3", ""], [9, 0, "11-16", "20:00", "D", "Saal 1", ""], [4, 0, "11-16", "20:00", "D", "Saal 10", ""], [5, 0, "11-16", "20:00", "D", "Saal 7", ""], [21, 0, "11-16", "20:00", "D", "Saal 8", ""], [7, 0, "11-16", "20:00", "E/df", "Saal 6", ""], [20, 1, "11-16", "20:00", "E/df", "Saal 2", ""], [4, 2, "11-16", "20:00", "D", "Saal 1", ""], [5, 2, "11-16", "20:00", "D", "Saal 5", ""], [5, 0, "11-16", "20:15", "E/df", "Saal 4", ""], [9, 2, "11-16", "20:15", "D", "Saal 6", ""], [6, 2, "11-16", "20:15", "E/d", "Saal 3", ""], [10, 2, "11-16", "20:15", "D", "Saal 4", ""], [4, 0, "11-16", "20:30", "E/df", "Saal 2", ""], [22, 0, "11-16", "20:30", "D", "Saal 5", ""], [7, 2, "11-16", "20:30", "D", "Saal 2", ""], [23, 0, "11-16", "21:00", "D", "Saal 9", ""], [39, 3, "11-16", "21:30", "", "", ""], [9, 0, "11-17", "14:00", "D", "Saal 7", ""], [33, 0, "11-17", "14:00", "D", "Saal 9", ""], [20, 1, "11-17", "14:00", "D", "Saal 2", ""], [4, 2, "11-17", "14:00", "D", "Saal 1", ""], [6, 2, "11-17", "14:00", "E/d", "Saal 3", ""], [34, 0, "11-17", "14:15", "D", "Saal 5", ""], [11, 0, "11-17", "14:15", "D", "Saal 2", ""], [40, 1, "11-17", "14:15", "D", "Saal 3", ""], [4, 0, "11-17", "14:30", "D", "Saal 1", ""], [18, 1, "11-17", "14:30", "D", "Saal 1", ""], [26, 2, "11-17", "14:30", "D", "Saal 5", ""], [4, 2, "11-17", "14:30", "D", "Saal 4", ""], [27, 2, "11-17", "14:45", "D", "Saal 6", ""], [35, 0, "11-17", "15:00", "D", "Saal 8", ""], [3, 0, "11-17", "15:00", "O/d", "Saal 3", ""], [26, 0, "11-17", "15:15", "D", "Saal 4", ""], [0, 0, "11-17", "15:15", "D", "Saal 6", ""], [27, 0, "11-17", "15:15", "D", "Saal 10", ""], [38, 0, "11-17", "16:45", "D", "Saal 5", ""], [9, 0, "11-17", "17:00", "D", "Saal 7", ""], [3, 1, "11-17", "17:00", "O/df", "Saal 2", ""], [4, 2, "11-17", "17:00", "D", "Saal 1", ""], [5, 2, "11-17", "17:00", "D", "Saal 5", ""], [11, 2, "11-17", "17:00", "D", "Saal 3", ""], [4, 0, "11-17", "17:15", "D", "Saal 1", ""], [6, 0, "11-17", "17:15", "E/d", "Saal 4", ""], [5, 0, "11-17", "17:15", "D", "Saal 10", ""], [2, 0, "11-17", "17:15", "E/df", "Saal 9", ""], [7, 0, "11-17", "17:15", "D", "Saal 6", ""], [8, 1, "11-17", "17:15", "E/df", "Saal 3", ""], [9, 2, "11-17", "17:15", "D", "Saal 6", ""], [10, 2, "11-17", "17:15", "D", "Saal 4", ""], [13, 0, "11-17", "17:30", "D", "Saal 8", ""], [11, 0, "11-17", "17:30", "E/d", "Saal 2", ""], [12, 1, "11-17", "17:30", "O/de", "Saal 1", ""], [7, 2, "11-17", "17:30", "D", "Saal 2", ""], [14, 0, "11-17", "17:45", "I", "Saal 3", ""], [24, 3, "11-17", "18:45", "", "", ""], [18, 1, "11-17", "19:30", "D", "Saal 1", ""], [19, 1, "11-17", "19:45", "D", "Saal 3", ""], [4, 0, "11-17", "20:00", "D", "Saal 10", ""], [41, 0, "11-17", "20:00", "D", "Saal 1", ""], [41, 0, "11-17", "20:00", "E/df", "Saal 7", ""], [21, 0, "11-17", "20:00", "D", "Saal 8", ""], [7, 0, "11-17", "20:00", "E/df", "Saal 6", ""], [20, 1, "11-17", "20:00", "E/df", "Saal 2", ""], [41, 2, "11-17", "20:00", "D", "Saal 1", ""], [41, 2, "11-17", "20:00", "E/df", "Saal 5", ""], [5, 0, "11-17", "20:15", "E/df", "Saal 4", ""], [9, 2, "11-17", "20:15", "D", "Saal 6", ""], [21, 2, "11-17", "20:15", "D", "Saal 3", ""], [4, 0, "11-17", "20:30", "E/df", "Saal 2", ""], [22, 0, "11-17", "20:30", "D", "Saal 5", ""], [4, 2, "11-17", "20:30", "E/df", "Saal 4", ""], [7, 2, "11-17", "20:30", "D", "Saal 2", ""], [23, 0, "11-17", "21:00", "D", "Saal 9", ""], [42, 3, "11-17", "21:15", "", "", ""], [31, 0, "11-18", "13:00", "CH", "Saal 7", ""], [0, 0, "11-18", "13:00", "D", "Saal 6", ""], [32, 0, "11-18", "13:00", "D", "Saal 8", ""], [26, 0, "11-18", "13:15", "D", "Saal 4", ""], [43, 0, "11-18", "13:15", "D", "Saal 3", ""], [27, 0, "11-18", "13:15", "D", "Saal 10", ""], [33, 0, "11-18", "14:00", "D", "Saal 9", ""], [3, 1, "11-18", "14:00", "O/df", "Saal 2", ""], [4, 2, "11-18", "14:00", "D", "Saal 1", ""], [5, 2, "11-18", "14:00", "D", "Saal 4", ""], [34, 0, "11-18", "14:15", "D", "Saal 5", ""], [11, 0, "11-18", "14:15", "D", "Saal 2", ""], [40, 1, "11-18", "14:15", "D", "Saal 3", ""], [0, 2, "11-18", "14:15", "D", "Saal 3", ""], [18, 1, "11-18", "14:30", "D", "Saal 1", ""], [26, 2, "11-18", "14:30", "D", "Saal 5", ""], [27, 2, "11-18", "14:45", "D", "Saal 6", ""], [0, 0, "11-18", "15:00", "D", "Saal 6", ""], [28, 0, "11-18", "15:00", "D", "Saal 7", ""], [26, 0, "11-18", "15:15", "D", "Saal 4", ""], [35, 0, "11-18", "15:15", "D", "Saal 8", ""], [27, 0, "11-18", "15:15", "D", "Saal 10", ""], [43, 0, "11-18", "15:30", "D", "Saal 3", ""], [38, 0, "11-18", "16:45", "D", "Saal 5", ""], [38, 2, "11-18", "16:45", "E/df", "Saal 4", ""], [3, 1, "11-18", "17:00", "O/df", "Saal 2", ""], [4, 2, "11-18", "17:00", "E/df", "Saal 1", ""], [5, 2, "11-18", "17:00", "D", "Saal 5", ""], [11, 2, "11-18", "17:00", "D", "Saal 3", ""], [9, 0, "11-18", "17:15", "D", "Saal 7", ""], [4, 0, "11-18", "17:15", "D", "Saal 1", ""], [6, 0, "11-18", "17:15", "E/d", "Saal 4", ""], [5, 0, "11-18", "17:15", "D", "Saal 10", ""], [2, 0, "11-18", "17:15", "E/df", "Saal 9", ""], [7, 0, "11-18", "17:15", "D", "Saal 6", ""], [8, 1, "11-18", "17:15", "E/df", "Saal 3", ""], [9, 2, "11-18", "17:15", "D", "Saal 6", ""], [11, 0, "11-18", "17:30", "E/d", "Saal 2", ""], [12, 1, "11-18", "17:30", "O/de", "Saal 1", ""], [7, 2, "11-18", "17:30", "E/df", "Saal 2", ""], [13, 0, "11-18", "17:45", "D", "Saal 8", ""], [14, 0, "11-18", "17:45", "I", "Saal 3", ""], [18, 1, "11-18", "19:30", "D", "Saal 1", ""], [19, 1, "11-18", "19:45", "D", "Saal 3", ""], [44, 3, "11-18", "20:00", "", "", "3D-Vorstellung / Einführung im Rahmen der Filmreih"], [4, 0, "11-18", "20:00", "D", "Saal 10", ""], [41, 0, "11-18", "20:00", "D", "Saal 1", ""], [41, 0, "11-18", "20:00", "E/df", "Saal 7", ""], [7, 0, "11-18", "20:00", "E/df", "Saal 6", ""], [20, 1, "11-18", "20:00", "E/df", "Saal 2", ""], [4, 2, "11-18", "20:00", "D", "Saal 1", ""], [5, 2, "11-18", "20:00", "D", "Saal 5", ""], [5, 0, "11-18", "20:15", "E/df", "Saal 4", ""], [21, 0, "11-18", "20:15", "D", "Saal 8", ""], [9, 2, "11-18", "20:15", "D", "Saal 6", ""], [6, 2, "11-18", "20:15", "E/d", "Saal 3", ""], [10, 2, "11-18", "20:15", "D", "Saal 4", ""], [4, 0, "11-18", "20:30", "E/df", "Saal 2", ""], [22, 0, "11-18", "20:30", "D", "Saal 5", ""], [7, 2, "11-18", "20:30", "D", "Saal 2", ""], [23, 0, "11-18", "21:00", "D", "Saal 9", ""], [44, 3, "11-19", "18:45", "", "", "3D-Vorstellung"], [45, 3, "11-19", "21:00", "", "", "Gespräch mit Fabian Chiquet (Regie)"], [46, 3, "11-20", "13:15", "", "", ""], [47, 3, "11-20", "15:15", "", "", ""], [12, 3, "11-20", "17:00", "", "", ""], [24, 3, "11-20", "19:00", "", "", ""], [44, 3, "11-20", "21:30", "", "", "3D-Vorstellung"], [48, 3, "11-21", "10:45", "", "", ""], [48, 3, "11-21", "12:30", "", "", ""], [49, 3, "11-21", "16:45", "", "", ""], [29, 3, "11-21", "19:00", "", "", ""], [46, 3, "11-21", "21:30", "", "", ""], [44, 3, "11-22", "12:00", "", "", ""], [46, 3, "11-23", "19:00", "", "", ""], [50, 3, "11-23", "21:15", "", "", ""], [24, 3, "11-24", "18:45", "", "", ""], [17, 3, "11-24", "21:15", "", "", ""], [51, 3, "11-26", "19:00", "", "", ""], [52, 3, "11-26", "21:15", "", "", "Gespräch mit Dominik Locher (Regie) und Anna Schmi"], [44, 3, "11-27", "13:15", "", "", ""], [53, 3, "11-27", "18:45", "", "", ""], [46, 3, "11-27", "21:30", "", "", ""], [1, 3, "11-28", "16:45", "", "", ""], [52, 3, "11-28", "19:00", "", "", ""], [51, 3, "11-28", "21:15", "", "", ""], [54, 3, "11-29", "12:00", "", "", "Gespräch mit Daniela Magnani-Hüller (Regie)"], [51, 3, "11-30", "19:00", "", "", ""], [52, 3, "11-30", "21:15", "", "", ""], [46, 3, "12-01", "19:00", "", "", ""], [55, 3, "12-01", "21:15", "", "", "Einführung in die Filmreihe «Power-Couples: Prägen"], [56, 3, "12-02", "19:00", "", "", ""], [51, 3, "12-02", "21:15", "", "", ""], [57, 3, "12-03", "18:30", "", "", ""], [58, 3, "12-03", "21:15", "", "", ""], [52, 3, "12-04", "13:15", "", "", ""], [59, 3, "12-04", "19:00", "", "", ""], [57, 3, "12-04", "21:15", "", "", ""], [49, 3, "12-05", "16:45", "", "", ""], [46, 3, "12-05", "19:00", "", "", ""], [57, 3, "12-05", "21:15", "", "", ""], [56, 3, "12-06", "12:00", "", "", ""], [52, 3, "12-07", "19:00", "", "", ""], [60, 3, "12-07", "21:15", "", "", ""], [57, 3, "12-08", "18:30", "", "", ""], [61, 3, "12-08", "21:15", "", "", ""], [62, 3, "12-10", "19:00", "", "", "Filmgespräch mit Hao Hohl (Regie) und Ernst Hohl ("], [59, 3, "12-10", "21:45", "", "", ""], [57, 3, "12-11", "13:15", "", "", ""], [51, 3, "12-11", "19:00", "", "", ""], [63, 3, "12-11", "21:15", "", "", ""], [64, 3, "12-12", "16:45", "", "", ""], [58, 3, "12-12", "19:00", "", "", ""], [63, 3, "12-12", "21:15", "", "", ""], [65, 3, "12-13", "12:00", "", "", ""], [66, 3, "12-13", "19:30", "", "", ""]]};
+const DATA={"f": [["Der frechste Troll der Welt", "Trickfilm, Familienfilm, Fantasy", "posters/0.jpg", "https://www.cineman.ch/movie/2026/KrolleBolle/", 80, "2026-11-05"], ["Pumuckl und das grosse Missverständnis", "Abenteuer, Trickfilm, Familienfilm, Komödie", "posters/1.jpg", "https://www.cineman.ch/movie/2025/PumucklUndDasGrosseMissverstaendnis/", 98, "2025-10-30"], ["Die Odyssee", "Action, Abenteuer, Fantasy, Geschichte", "posters/2.jpg", "https://www.cineman.ch/movie/2026/TheOdyssey/", 172, "2026-07-16"], ["From Inside Out - Die Architektur von Peter Zumthor", "Dokumentation", "posters/3.jpg", "https://www.cineman.ch/movie/2026/FromInsideOutTheArchitectureOfPeterZumthor/", 114, "2026-11-05"], ["Ebenezer - Eine Weihnachtsgeschichte", "Fantasy", "posters/4.jpg", "https://www.cineman.ch/movie/2026/EbenezerAChristmasCarol/", 115, "2026-11-12"], ["How to Rob A Bank", "Action, Krimi, Thriller", "posters/5.jpg", "https://www.cineman.ch/movie/2026/HowToRobABank/", 122, "2026-11-12"], ["George Michael: The Faith Tour", "Musikfilm, Musical", "posters/6.jpg", "https://www.cineman.ch/movie/2026/GeorgeMichaelTheFaithTour/", 114, "2026-11-12"], ["Wild Horse Nine", "Krimi, Drama, Thriller", "posters/7.jpg", "https://www.cineman.ch/movie/2026/WildHorseNine/", 117, "2026-11-12"], ["A Talent for Murder", "Krimi, Drama, Thriller", "posters/8.jpg", "https://www.cineman.ch/movie/2026/ATalentForMurder/", 107, "2026-11-05"], ["Der perfekte Urlaub", "Komödie, Drama, Liebesfilm", "posters/9.jpg", "https://www.cineman.ch/movie/2026/DerPerfekteUrlaub/", 126, "2026-10-22"], ["Godzilla Minus Zero", "Action, Abenteuer, Drama", "posters/10.jpg", "https://www.cineman.ch/movie/2026/GodzillaMinusZero/", 135, "2026-11-05"], ["Wildwood", "Abenteuer, Trickfilm, Drama", "posters/11.jpg", "https://www.cineman.ch/movie/2026/Wildwood/", 130, "2026-11-05"], ["NAZA", "Dokumentation, Krieg", "posters/12.jpg", "https://www.cineman.ch/movie/2026/NAZA/", 78, "2026-10-01"], ["Eiserne Wildnis - Heart Of The Beast", "Action, Abenteuer, Drama", "posters/13.jpg", "https://www.cineman.ch/movie/2026/HeartOfTheBeast/", 101, "2026-09-24"], ["Je so' pazzo", "", "posters/14.jpg", "https://www.cineman.ch/movie/2026/JeSoPazzo/", 105, "2026-11-12"], ["Clayface", "Action, Abenteuer, Fantasy, Horror, Thriller", "posters/15.jpg", "https://www.cineman.ch/movie/2026/Clayface/", 109, "2026-10-22"], ["Resident Evil", "Horror", "posters/16.jpg", "https://www.cineman.ch/movie/2026/ResidentEvil/", 93, "2026-09-17"], ["La vita da grandi (Das Leben als Erwachsene)", "Programmkino", "posters/17.jpg", "https://www.kinocameo.ch/film/la-vita-da-grandi-das-leben-als-erwachsene", 95, "2025-01-01"], ["Heimsuchung", "Drama, Geschichte", "posters/18.jpg", "https://www.cineman.ch/movie/2026/Heimsuchung/", 122, "2026-11-12"], ["Gentle Monster", "Drama, Thriller", "posters/19.jpg", "https://www.cineman.ch/movie/2026/GentleMonster/", 114, "2026-11-12"], ["Frank & Louis", "Drama", "posters/20.jpg", "https://www.cineman.ch/movie/2025/FrankLouis/", 96, "2026-10-22"], ["Verity - Dunkle Geheimnisse", "Krimi, Drama, Mystery, Liebesfilm, Thriller", "posters/21.jpg", "https://www.cineman.ch/movie/2026/Verity/", 114, "2026-10-01"], ["Obsession - Du sollst mich lieben", "Horror", "posters/22.jpg", "https://www.cineman.ch/movie/2025/Obsession/", 109, "2026-06-25"], ["Other Mommy", "Horror", "posters/23.jpg", "https://www.cineman.ch/movie/2026/OtherMommy/", 93, "2026-10-29"], ["Heimsuchung – Eine Jahrhundertgeschichte", "Programmkino", "posters/24.jpg", "https://www.kinocameo.ch/film/heimsuchung-eine-jahrhundertgeschichte", 122, "2026-11-12"], ["Christine", "Programmkino", "posters/25.jpg", "https://www.kinocameo.ch/film/christine", 110, "1983-01-01"], ["Auf der Suche nach der Weihnachtswerkstatt", "Trickfilm, Familienfilm, Komödie", "posters/26.jpg", "https://www.cineman.ch/movie/2026/JulenissensVerksted/", 71, "2026-11-12"], ["Shaun das Schaf - Spuk im Kürbisfeld", "Abenteuer, Trickfilm, Komödie", "posters/27.jpg", "https://www.cineman.ch/movie/2025/ShaunTheSheepTheBeastOfMossyBottom/", 81, "2026-10-01"], ["Minions & Monster", "Abenteuer, Trickfilm, Komödie", "posters/28.jpg", "https://www.cineman.ch/movie/2027/MinionsMonsters/", 90, "2026-07-01"], ["Orwell: 2+2=5", "Dokumentation, Geschichte", "posters/29.jpg", "https://www.cineman.ch/movie/2025/Orwell225/", 119, "2026-11-12"], ["Mumbo Jumbo", "Trickfilm, Familienfilm, Fantasy", "posters/30.jpg", "https://www.cineman.ch/movie/2026/MumboJumbo/", 83, "2026-10-29"], ["Der Regenbogenfisch", "Trickfilm, Familienfilm", "posters/31.jpg", "https://www.cineman.ch/movie/2026/DerRegenbogenfisch/", 69, "2026-11-19"], ["Paw Patrol: Der Dino Film", "Trickfilm", "posters/32.jpg", "https://www.cineman.ch/movie/2026/PawPatrolTheDinoMovie/", 89, "2026-08-06"], ["Spider-Man: Brand New Day", "Action", "posters/33.jpg", "https://www.cineman.ch/movie/2026/SpiderManBrandNewDay/", 144, "2026-07-29"], ["Glennkill: Ein Schafskrimi", "Action, Komödie, Mystery", "posters/34.jpg", "https://www.cineman.ch/movie/2026/TheSheepDetectives/", 109, "2026-05-14"], ["Emil und die Detektive", "Familienfilm", "posters/35.jpg", "https://www.cineman.ch/movie/2026/EmilUndDieDetektive/", 100, "2026-09-24"], ["Lieblingsmenschen", "Komödie, Drama", "posters/36.jpg", "https://www.cineman.ch/movie/2026/Lieblingsmenschen/", 108, "2026-11-19"], ["From Ground Zero – Filmtour 2026", "Programmkino", "posters/37.jpg", "https://www.kinocameo.ch/film/ground-zero-filmtour-2026", 117, "2025-01-01"], ["Ramayana: Rise of a Legend", "Action, Abenteuer, Drama", "posters/38.jpg", "https://www.cineman.ch/movie/2026/RamayanaRiseOfALegend/", 160, "2026-11-05"], ["Gioia mia (Mein Sommer mit Nonna)", "Programmkino", "posters/39.jpg", "https://www.kinocameo.ch/film/gioia-mia-mein-sommer-mit-nonna", 92, "2025-01-01"], ["Geister", "Drama, Liebesfilm", "posters/40.jpg", "https://www.cineman.ch/movie/2026/Geister/", 106, "2026-11-05"], ["Die Tribute von Panem - Sunrise on the Reaping", "Action, Abenteuer, Fantasy, Science Fiction, Thriller", "posters/41.jpg", "https://www.cineman.ch/movie/2026/TheHungerGamesSunriseOnTheReaping/", 158, "2026-11-19"], ["Dekalog 9 und 10", "Programmkino", "posters/42.jpg", "https://www.kinocameo.ch/film/dekalog-9-und-10", 58, "1989-01-01"], ["Bibi Blocksberg - Die total verhexte Zeitreise", "Abenteuer", "posters/43.jpg", "https://www.cineman.ch/movie/2025/BibiBlocksbergDieTotalVerhexteZeitreise/", 90, "2026-09-24"], ["From Inside Out – Die Architektur von Peter Zumthor", "Programmkino", "posters/44.jpg", "https://www.kinocameo.ch/film/inside-out-die-architektur-von-peter-zumthor", 114, "2026-11-05"], ["Imagine Peace", "Programmkino", "posters/45.jpg", "https://www.kinocameo.ch/film/imagine-peace", 95, "2026-10-22"], ["The Loneliest Man in Town", "Programmkino", "posters/46.jpg", "https://www.kinocameo.ch/film/loneliest-man-town", 86, "2026-11-19"], ["Wenn die Erinnerung verblasst", "Programmkino", "posters/47.jpg", "https://www.kinocameo.ch/film/wenn-die-erinnerung-verblasst", 80, "2026-10-15"], ["Kleine Laterne – Gefühle", "Programmkino", "posters/48.jpg", "https://www.kinocameo.ch/film/kleine-laterne-gefuehle-0", null, null], ["Die rote Zora", "Programmkino", "posters/49.jpg", "https://www.kinocameo.ch/film/die-rote-zora", 99, "2008-01-01"], ["Tre ciotole (Drei Abschiede)", "Programmkino", "posters/50.jpg", "https://www.kinocameo.ch/film/tre-ciotole-drei-abschiede", 122, "2025-01-01"], ["Congo Boy", "Programmkino", "posters/51.jpg", "https://www.kinocameo.ch/film/congo-boy", 91, "2026-11-26"], ["Enjoy Your Stay", "Programmkino", "posters/52.jpg", "https://www.kinocameo.ch/film/enjoy-your-stay", 100, "2026-11-26"], ["Gruppo di famiglia in un interno (Gewalt und Leidenschaft)", "Programmkino", "posters/53.jpg", "https://www.kinocameo.ch/film/gruppo-di-famiglia-un-interno-gewalt-und-leidenschaft", 121, "1974-01-01"], ["Was an Empfindsamkeit bleibt", "Programmkino", "posters/54.jpg", "https://www.kinocameo.ch/film/was-empfindsamkeit-bleibt", 91, "2026-11-26"], ["La strada", "Programmkino", "posters/55.jpg", "https://www.kinocameo.ch/film/la-strada", 115, "1954-01-01"], ["Gabin", "Programmkino", "posters/56.jpg", "https://www.kinocameo.ch/film/gabin", 105, "2026-11-26"], ["Histoires parallèles", "Programmkino", "posters/57.jpg", "https://www.kinocameo.ch/film/histoires-paralleles", 139, "2026-12-03"], ["Eifach machä – Eidberger Openair, der Film", "Programmkino", "posters/58.jpg", "https://www.kinocameo.ch/film/eifach-machae-eidberger-openair-der-film", null, null], ["Was haben wir gelacht", "Programmkino", "posters/59.jpg", "https://www.kinocameo.ch/film/was-haben-wir-gelacht", 98, "2026-10-22"], ["Prinzessin Mononoke (Mononoke-hime) – Re-Release", "Programmkino", "posters/60.jpg", "https://www.kinocameo.ch/film/prinzessin-mononoke-mononoke-hime-re-release", 134, "2000-03-16"], ["The Pink Panther", "Programmkino", "posters/61.jpg", "https://www.kinocameo.ch/film/pink-panther", 113, "1963-01-01"], ["Anders anders – Was uns verbindet", "Programmkino", "posters/62.jpg", "https://www.kinocameo.ch/film/anders-anders-was-uns-verbindet", 82, "2026-10-22"], ["Minotaur", "Programmkino", "posters/63.jpg", "https://www.kinocameo.ch/film/minotaur", 135, "2026-12-10"], ["Mein Freund Barry", "Programmkino", "posters/64.jpg", "https://www.kinocameo.ch/film/mein-freund-barry", 95, "2026-01-14"], ["Buure", "Programmkino", "posters/65.jpg", "https://www.kinocameo.ch/film/buure", 90, "2026-12-10"], ["Best-of Int. Kurzfilmtage Winterthur 2026", "Programmkino", "posters/66.jpg", "https://www.kinocameo.ch/film/best-int-kurzfilmtage-winterthur-2026", null, null]], "s": [[0, 2, "11-14", "15:55", "D", "Saal 3", ""], [1, 3, "11-14", "16:45", "", "", ""], [2, 0, "11-14", "16:45", "E/df", "Saal 9", ""], [3, 1, "11-14", "17:00", "O/df", "Saal 2", ""], [4, 2, "11-14", "17:00", "E/df", "Saal 1", ""], [5, 2, "11-14", "17:00", "D", "Saal 5", ""], [4, 0, "11-14", "17:15", "D", "Saal 1", ""], [6, 0, "11-14", "17:15", "E/d", "Saal 4", ""], [5, 0, "11-14", "17:15", "D", "Saal 10", ""], [7, 0, "11-14", "17:15", "D", "Saal 6", ""], [8, 1, "11-14", "17:15", "E/df", "Saal 3", ""], [9, 2, "11-14", "17:15", "D", "Saal 6", ""], [10, 0, "11-14", "17:30", "D", "Saal 5", ""], [11, 0, "11-14", "17:30", "E/d", "Saal 2", ""], [12, 1, "11-14", "17:30", "O/de", "Saal 1", ""], [9, 0, "11-14", "17:45", "D", "Saal 7", ""], [13, 0, "11-14", "17:45", "D", "Saal 8", ""], [14, 0, "11-14", "18:00", "I", "Saal 3", ""], [15, 2, "11-14", "18:00", "D", "Saal 2", ""], [6, 2, "11-14", "18:10", "E/d", "Saal 3", ""], [16, 2, "11-14", "18:15", "D", "Saal 4", ""], [17, 3, "11-14", "19:00", "", "", "Einführung von der Società Dante Alighieri"], [18, 1, "11-14", "19:30", "D", "Saal 1", ""], [19, 1, "11-14", "19:45", "D", "Saal 3", ""], [9, 0, "11-14", "20:00", "D", "Saal 1", ""], [4, 0, "11-14", "20:00", "D", "Saal 10", ""], [7, 0, "11-14", "20:00", "E/df", "Saal 6", ""], [20, 1, "11-14", "20:00", "D", "Saal 2", ""], [4, 2, "11-14", "20:00", "D", "Saal 1", ""], [5, 2, "11-14", "20:00", "D", "Saal 5", ""], [5, 0, "11-14", "20:15", "E/df", "Saal 4", ""], [21, 0, "11-14", "20:15", "D", "Saal 8", ""], [9, 2, "11-14", "20:15", "D", "Saal 6", ""], [4, 0, "11-14", "20:30", "E/df", "Saal 2", ""], [5, 0, "11-14", "20:30", "D", "Saal 7", ""], [22, 0, "11-14", "20:30", "D", "Saal 5", ""], [23, 0, "11-14", "20:30", "D", "Saal 9", ""], [10, 2, "11-14", "20:30", "D", "Saal 4", ""], [7, 2, "11-14", "20:45", "D", "Saal 2", ""], [23, 2, "11-14", "21:00", "D", "Saal 3", ""], [18, 3, "11-14", "21:15", "", "", ""], [25, 3, "11-14", "23:30", "", "", ""], [26, 2, "11-15", "10:00", "D", "Saal 5", ""], [0, 2, "11-15", "10:00", "D", "Saal 3", ""], [27, 2, "11-15", "10:10", "D", "Saal 6", ""], [4, 2, "11-15", "10:30", "D", "Saal 1", ""], [28, 2, "11-15", "11:00", "D", "Saal 4", ""], [29, 3, "11-15", "12:00", "", "", ""], [4, 2, "11-15", "12:05", "D", "Saal 5", ""], [6, 2, "11-15", "12:15", "E/d", "Saal 3", ""], [30, 2, "11-15", "12:25", "D", "Saal 6", ""], [31, 0, "11-15", "13:00", "CH", "Saal 7", ""], [0, 0, "11-15", "13:00", "D", "Saal 6", ""], [14, 0, "11-15", "13:00", "I", "Saal 3", ""], [32, 0, "11-15", "13:00", "D", "Saal 8", ""], [26, 0, "11-15", "13:15", "D", "Saal 4", ""], [27, 0, "11-15", "13:15", "D", "Saal 10", ""], [33, 0, "11-15", "13:30", "D", "Saal 9", ""], [9, 2, "11-15", "13:30", "D", "Saal 1", ""], [4, 2, "11-15", "13:30", "D", "Saal 4", ""], [3, 1, "11-15", "14:00", "O/df", "Saal 2", ""], [31, 2, "11-15", "14:00", "CH", "Saal 2", ""], [34, 0, "11-15", "14:15", "D", "Saal 5", ""], [11, 0, "11-15", "14:15", "D", "Saal 2", ""], [8, 1, "11-15", "14:15", "D", "Saal 3", ""], [12, 3, "11-15", "14:30", "", "", ""], [4, 0, "11-15", "14:30", "D", "Saal 1", ""], [18, 1, "11-15", "14:30", "D", "Saal 1", ""], [27, 2, "11-15", "14:45", "D", "Saal 6", ""], [26, 2, "11-15", "14:55", "D", "Saal 5", ""], [0, 0, "11-15", "15:00", "D", "Saal 6", ""], [9, 0, "11-15", "15:00", "D", "Saal 7", ""], [0, 2, "11-15", "15:05", "D", "Saal 3", ""], [26, 0, "11-15", "15:15", "D", "Saal 4", ""], [35, 0, "11-15", "15:15", "D", "Saal 8", ""], [27, 0, "11-15", "15:15", "D", "Saal 10", ""], [14, 0, "11-15", "15:30", "I", "Saal 3", ""], [10, 2, "11-15", "16:15", "D", "Saal 4", ""], [5, 2, "11-15", "16:15", "D", "Saal 2", ""], [2, 0, "11-15", "16:45", "E/df", "Saal 9", ""], [4, 2, "11-15", "16:45", "D", "Saal 1", ""], [3, 1, "11-15", "17:00", "O/df", "Saal 2", ""], [9, 2, "11-15", "17:00", "D", "Saal 6", ""], [36, 2, "11-15", "17:00", "D", "Saal 5", ""], [4, 0, "11-15", "17:15", "D", "Saal 1", ""], [6, 0, "11-15", "17:15", "E/d", "Saal 4", ""], [5, 0, "11-15", "17:15", "D", "Saal 10", ""], [7, 0, "11-15", "17:15", "D", "Saal 6", ""], [8, 1, "11-15", "17:15", "E/df", "Saal 3", ""], [21, 2, "11-15", "17:15", "D", "Saal 3", ""], [10, 0, "11-15", "17:30", "D", "Saal 5", ""], [11, 0, "11-15", "17:30", "E/d", "Saal 2", ""], [12, 1, "11-15", "17:30", "O/de", "Saal 1", ""], [9, 0, "11-15", "17:45", "D", "Saal 7", ""], [13, 0, "11-15", "17:45", "D", "Saal 8", ""], [14, 0, "11-15", "18:00", "I", "Saal 3", ""], [37, 3, "11-15", "18:30", "", "", "Diskussionsrunde mit Marcus Bachmann (Ärzte ohne G"], [38, 2, "11-15", "19:15", "D", "Saal 4", ""], [18, 1, "11-15", "19:30", "D", "Saal 1", ""], [7, 2, "11-15", "19:30", "E/df", "Saal 2", ""], [19, 1, "11-15", "19:45", "D", "Saal 3", ""], [9, 2, "11-15", "19:45", "D", "Saal 5", ""], [4, 2, "11-15", "19:45", "E/df", "Saal 1", ""], [9, 0, "11-15", "20:00", "D", "Saal 1", ""], [4, 0, "11-15", "20:00", "D", "Saal 10", ""], [7, 0, "11-15", "20:00", "E/df", "Saal 6", ""], [20, 1, "11-15", "20:00", "D", "Saal 2", ""], [5, 2, "11-15", "20:00", "D", "Saal 6", ""], [23, 2, "11-15", "20:05", "D", "Saal 3", ""], [5, 0, "11-15", "20:15", "E/df", "Saal 4", ""], [21, 0, "11-15", "20:15", "D", "Saal 8", ""], [4, 0, "11-15", "20:30", "E/df", "Saal 2", ""], [5, 0, "11-15", "20:30", "D", "Saal 7", ""], [22, 0, "11-15", "20:30", "D", "Saal 5", ""], [23, 0, "11-15", "20:30", "D", "Saal 9", ""], [9, 0, "11-16", "14:00", "D", "Saal 7", ""], [33, 0, "11-16", "14:00", "D", "Saal 9", ""], [20, 1, "11-16", "14:00", "D", "Saal 2", ""], [4, 2, "11-16", "14:00", "D", "Saal 1", ""], [38, 2, "11-16", "14:00", "D", "Saal 4", ""], [34, 0, "11-16", "14:15", "D", "Saal 5", ""], [11, 0, "11-16", "14:15", "D", "Saal 2", ""], [8, 1, "11-16", "14:15", "D", "Saal 3", ""], [0, 2, "11-16", "14:15", "D", "Saal 3", ""], [4, 0, "11-16", "14:30", "D", "Saal 1", ""], [18, 1, "11-16", "14:30", "D", "Saal 1", ""], [26, 2, "11-16", "14:30", "D", "Saal 5", ""], [27, 2, "11-16", "14:45", "D", "Saal 6", ""], [35, 0, "11-16", "15:00", "D", "Saal 8", ""], [3, 0, "11-16", "15:00", "O/d", "Saal 3", ""], [26, 0, "11-16", "15:15", "D", "Saal 4", ""], [0, 0, "11-16", "15:15", "D", "Saal 6", ""], [27, 0, "11-16", "15:15", "D", "Saal 10", ""], [9, 0, "11-16", "17:00", "D", "Saal 7", ""], [3, 1, "11-16", "17:00", "O/df", "Saal 2", ""], [4, 2, "11-16", "17:00", "E/df", "Saal 1", ""], [5, 2, "11-16", "17:00", "D", "Saal 5", ""], [11, 2, "11-16", "17:00", "D", "Saal 3", ""], [4, 0, "11-16", "17:15", "D", "Saal 1", ""], [6, 0, "11-16", "17:15", "E/d", "Saal 4", ""], [5, 0, "11-16", "17:15", "D", "Saal 10", ""], [2, 0, "11-16", "17:15", "E/df", "Saal 9", ""], [7, 0, "11-16", "17:15", "D", "Saal 6", ""], [8, 1, "11-16", "17:15", "E/df", "Saal 3", ""], [9, 2, "11-16", "17:15", "D", "Saal 6", ""], [13, 0, "11-16", "17:30", "D", "Saal 8", ""], [10, 0, "11-16", "17:30", "D", "Saal 5", ""], [11, 0, "11-16", "17:30", "E/d", "Saal 2", ""], [12, 1, "11-16", "17:30", "O/de", "Saal 1", ""], [5, 2, "11-16", "17:30", "D", "Saal 4", ""], [7, 2, "11-16", "17:30", "E/df", "Saal 2", ""], [14, 0, "11-16", "17:45", "I", "Saal 3", ""], [29, 3, "11-16", "19:00", "", "", ""], [18, 1, "11-16", "19:30", "D", "Saal 1", ""], [19, 1, "11-16", "19:45", "D", "Saal 3", ""], [9, 0, "11-16", "20:00", "D", "Saal 1", ""], [4, 0, "11-16", "20:00", "D", "Saal 10", ""], [5, 0, "11-16", "20:00", "D", "Saal 7", ""], [21, 0, "11-16", "20:00", "D", "Saal 8", ""], [7, 0, "11-16", "20:00", "E/df", "Saal 6", ""], [20, 1, "11-16", "20:00", "E/df", "Saal 2", ""], [4, 2, "11-16", "20:00", "D", "Saal 1", ""], [5, 2, "11-16", "20:00", "D", "Saal 5", ""], [5, 0, "11-16", "20:15", "E/df", "Saal 4", ""], [9, 2, "11-16", "20:15", "D", "Saal 6", ""], [6, 2, "11-16", "20:15", "E/d", "Saal 3", ""], [10, 2, "11-16", "20:15", "D", "Saal 4", ""], [4, 0, "11-16", "20:30", "E/df", "Saal 2", ""], [22, 0, "11-16", "20:30", "D", "Saal 5", ""], [7, 2, "11-16", "20:30", "D", "Saal 2", ""], [23, 0, "11-16", "21:00", "D", "Saal 9", ""], [39, 3, "11-16", "21:30", "", "", ""], [9, 0, "11-17", "14:00", "D", "Saal 7", ""], [33, 0, "11-17", "14:00", "D", "Saal 9", ""], [20, 1, "11-17", "14:00", "D", "Saal 2", ""], [4, 2, "11-17", "14:00", "D", "Saal 1", ""], [6, 2, "11-17", "14:00", "E/d", "Saal 3", ""], [34, 0, "11-17", "14:15", "D", "Saal 5", ""], [11, 0, "11-17", "14:15", "D", "Saal 2", ""], [40, 1, "11-17", "14:15", "D", "Saal 3", ""], [4, 0, "11-17", "14:30", "D", "Saal 1", ""], [18, 1, "11-17", "14:30", "D", "Saal 1", ""], [26, 2, "11-17", "14:30", "D", "Saal 5", ""], [4, 2, "11-17", "14:30", "D", "Saal 4", ""], [27, 2, "11-17", "14:45", "D", "Saal 6", ""], [35, 0, "11-17", "15:00", "D", "Saal 8", ""], [3, 0, "11-17", "15:00", "O/d", "Saal 3", ""], [26, 0, "11-17", "15:15", "D", "Saal 4", ""], [0, 0, "11-17", "15:15", "D", "Saal 6", ""], [27, 0, "11-17", "15:15", "D", "Saal 10", ""], [38, 0, "11-17", "16:45", "D", "Saal 5", ""], [9, 0, "11-17", "17:00", "D", "Saal 7", ""], [3, 1, "11-17", "17:00", "O/df", "Saal 2", ""], [4, 2, "11-17", "17:00", "D", "Saal 1", ""], [5, 2, "11-17", "17:00", "D", "Saal 5", ""], [11, 2, "11-17", "17:00", "D", "Saal 3", ""], [4, 0, "11-17", "17:15", "D", "Saal 1", ""], [6, 0, "11-17", "17:15", "E/d", "Saal 4", ""], [5, 0, "11-17", "17:15", "D", "Saal 10", ""], [2, 0, "11-17", "17:15", "E/df", "Saal 9", ""], [7, 0, "11-17", "17:15", "D", "Saal 6", ""], [8, 1, "11-17", "17:15", "E/df", "Saal 3", ""], [9, 2, "11-17", "17:15", "D", "Saal 6", ""], [10, 2, "11-17", "17:15", "D", "Saal 4", ""], [13, 0, "11-17", "17:30", "D", "Saal 8", ""], [11, 0, "11-17", "17:30", "E/d", "Saal 2", ""], [12, 1, "11-17", "17:30", "O/de", "Saal 1", ""], [7, 2, "11-17", "17:30", "D", "Saal 2", ""], [14, 0, "11-17", "17:45", "I", "Saal 3", ""], [18, 3, "11-17", "18:45", "", "", ""], [18, 1, "11-17", "19:30", "D", "Saal 1", ""], [19, 1, "11-17", "19:45", "D", "Saal 3", ""], [4, 0, "11-17", "20:00", "D", "Saal 10", ""], [41, 0, "11-17", "20:00", "D", "Saal 1", ""], [41, 0, "11-17", "20:00", "E/df", "Saal 7", ""], [21, 0, "11-17", "20:00", "D", "Saal 8", ""], [7, 0, "11-17", "20:00", "E/df", "Saal 6", ""], [20, 1, "11-17", "20:00", "E/df", "Saal 2", ""], [41, 2, "11-17", "20:00", "D", "Saal 1", ""], [41, 2, "11-17", "20:00", "E/df", "Saal 5", ""], [5, 0, "11-17", "20:15", "E/df", "Saal 4", ""], [9, 2, "11-17", "20:15", "D", "Saal 6", ""], [21, 2, "11-17", "20:15", "D", "Saal 3", ""], [4, 0, "11-17", "20:30", "E/df", "Saal 2", ""], [22, 0, "11-17", "20:30", "D", "Saal 5", ""], [4, 2, "11-17", "20:30", "E/df", "Saal 4", ""], [7, 2, "11-17", "20:30", "D", "Saal 2", ""], [23, 0, "11-17", "21:00", "D", "Saal 9", ""], [42, 3, "11-17", "21:15", "", "", ""], [31, 0, "11-18", "13:00", "CH", "Saal 7", ""], [0, 0, "11-18", "13:00", "D", "Saal 6", ""], [32, 0, "11-18", "13:00", "D", "Saal 8", ""], [26, 0, "11-18", "13:15", "D", "Saal 4", ""], [43, 0, "11-18", "13:15", "D", "Saal 3", ""], [27, 0, "11-18", "13:15", "D", "Saal 10", ""], [33, 0, "11-18", "14:00", "D", "Saal 9", ""], [3, 1, "11-18", "14:00", "O/df", "Saal 2", ""], [4, 2, "11-18", "14:00", "D", "Saal 1", ""], [5, 2, "11-18", "14:00", "D", "Saal 4", ""], [34, 0, "11-18", "14:15", "D", "Saal 5", ""], [11, 0, "11-18", "14:15", "D", "Saal 2", ""], [40, 1, "11-18", "14:15", "D", "Saal 3", ""], [0, 2, "11-18", "14:15", "D", "Saal 3", ""], [18, 1, "11-18", "14:30", "D", "Saal 1", ""], [26, 2, "11-18", "14:30", "D", "Saal 5", ""], [27, 2, "11-18", "14:45", "D", "Saal 6", ""], [0, 0, "11-18", "15:00", "D", "Saal 6", ""], [28, 0, "11-18", "15:00", "D", "Saal 7", ""], [26, 0, "11-18", "15:15", "D", "Saal 4", ""], [35, 0, "11-18", "15:15", "D", "Saal 8", ""], [27, 0, "11-18", "15:15", "D", "Saal 10", ""], [43, 0, "11-18", "15:30", "D", "Saal 3", ""], [38, 0, "11-18", "16:45", "D", "Saal 5", ""], [38, 2, "11-18", "16:45", "E/df", "Saal 4", ""], [3, 1, "11-18", "17:00", "O/df", "Saal 2", ""], [4, 2, "11-18", "17:00", "E/df", "Saal 1", ""], [5, 2, "11-18", "17:00", "D", "Saal 5", ""], [11, 2, "11-18", "17:00", "D", "Saal 3", ""], [9, 0, "11-18", "17:15", "D", "Saal 7", ""], [4, 0, "11-18", "17:15", "D", "Saal 1", ""], [6, 0, "11-18", "17:15", "E/d", "Saal 4", ""], [5, 0, "11-18", "17:15", "D", "Saal 10", ""], [2, 0, "11-18", "17:15", "E/df", "Saal 9", ""], [7, 0, "11-18", "17:15", "D", "Saal 6", ""], [8, 1, "11-18", "17:15", "E/df", "Saal 3", ""], [9, 2, "11-18", "17:15", "D", "Saal 6", ""], [11, 0, "11-18", "17:30", "E/d", "Saal 2", ""], [12, 1, "11-18", "17:30", "O/de", "Saal 1", ""], [7, 2, "11-18", "17:30", "E/df", "Saal 2", ""], [13, 0, "11-18", "17:45", "D", "Saal 8", ""], [14, 0, "11-18", "17:45", "I", "Saal 3", ""], [18, 1, "11-18", "19:30", "D", "Saal 1", ""], [19, 1, "11-18", "19:45", "D", "Saal 3", ""], [3, 3, "11-18", "20:00", "", "", "3D-Vorstellung / Einführung im Rahmen der Filmreih"], [4, 0, "11-18", "20:00", "D", "Saal 10", ""], [41, 0, "11-18", "20:00", "D", "Saal 1", ""], [41, 0, "11-18", "20:00", "E/df", "Saal 7", ""], [7, 0, "11-18", "20:00", "E/df", "Saal 6", ""], [20, 1, "11-18", "20:00", "E/df", "Saal 2", ""], [4, 2, "11-18", "20:00", "D", "Saal 1", ""], [5, 2, "11-18", "20:00", "D", "Saal 5", ""], [5, 0, "11-18", "20:15", "E/df", "Saal 4", ""], [21, 0, "11-18", "20:15", "D", "Saal 8", ""], [9, 2, "11-18", "20:15", "D", "Saal 6", ""], [6, 2, "11-18", "20:15", "E/d", "Saal 3", ""], [10, 2, "11-18", "20:15", "D", "Saal 4", ""], [4, 0, "11-18", "20:30", "E/df", "Saal 2", ""], [22, 0, "11-18", "20:30", "D", "Saal 5", ""], [7, 2, "11-18", "20:30", "D", "Saal 2", ""], [23, 0, "11-18", "21:00", "D", "Saal 9", ""], [3, 3, "11-19", "18:45", "", "", "3D-Vorstellung"], [45, 3, "11-19", "21:00", "", "", "Gespräch mit Fabian Chiquet (Regie)"], [46, 3, "11-20", "13:15", "", "", ""], [47, 3, "11-20", "15:15", "", "", ""], [12, 3, "11-20", "17:00", "", "", ""], [18, 3, "11-20", "19:00", "", "", ""], [3, 3, "11-20", "21:30", "", "", "3D-Vorstellung"], [48, 3, "11-21", "10:45", "", "", ""], [48, 3, "11-21", "12:30", "", "", ""], [49, 3, "11-21", "16:45", "", "", ""], [29, 3, "11-21", "19:00", "", "", ""], [46, 3, "11-21", "21:30", "", "", ""], [3, 3, "11-22", "12:00", "", "", ""], [46, 3, "11-23", "19:00", "", "", ""], [50, 3, "11-23", "21:15", "", "", ""], [18, 3, "11-24", "18:45", "", "", ""], [17, 3, "11-24", "21:15", "", "", ""], [51, 3, "11-26", "19:00", "", "", ""], [52, 3, "11-26", "21:15", "", "", "Gespräch mit Dominik Locher (Regie) und Anna Schmi"], [3, 3, "11-27", "13:15", "", "", ""], [53, 3, "11-27", "18:45", "", "", ""], [46, 3, "11-27", "21:30", "", "", ""], [1, 3, "11-28", "16:45", "", "", ""], [52, 3, "11-28", "19:00", "", "", ""], [51, 3, "11-28", "21:15", "", "", ""], [54, 3, "11-29", "12:00", "", "", "Gespräch mit Daniela Magnani-Hüller (Regie)"], [51, 3, "11-30", "19:00", "", "", ""], [52, 3, "11-30", "21:15", "", "", ""], [46, 3, "12-01", "19:00", "", "", ""], [55, 3, "12-01", "21:15", "", "", "Einführung in die Filmreihe «Power-Couples: Prägen"], [56, 3, "12-02", "19:00", "", "", ""], [51, 3, "12-02", "21:15", "", "", ""], [57, 3, "12-03", "18:30", "", "", ""], [58, 3, "12-03", "21:15", "", "", ""], [52, 3, "12-04", "13:15", "", "", ""], [59, 3, "12-04", "19:00", "", "", ""], [57, 3, "12-04", "21:15", "", "", ""], [49, 3, "12-05", "16:45", "", "", ""], [46, 3, "12-05", "19:00", "", "", ""], [57, 3, "12-05", "21:15", "", "", ""], [56, 3, "12-06", "12:00", "", "", ""], [52, 3, "12-07", "19:00", "", "", ""], [60, 3, "12-07", "21:15", "", "", ""], [57, 3, "12-08", "18:30", "", "", ""], [61, 3, "12-08", "21:15", "", "", ""], [62, 3, "12-10", "19:00", "", "", "Filmgespräch mit Hao Hohl (Regie) und Ernst Hohl ("], [59, 3, "12-10", "21:45", "", "", ""], [57, 3, "12-11", "13:15", "", "", ""], [51, 3, "12-11", "19:00", "", "", ""], [63, 3, "12-11", "21:15", "", "", ""], [64, 3, "12-12", "16:45", "", "", ""], [58, 3, "12-12", "19:00", "", "", ""], [63, 3, "12-12", "21:15", "", "", ""], [65, 3, "12-13", "12:00", "", "", ""], [66, 3, "12-13", "19:30", "", "", ""]], "u": "2026-11-14"};
 const CIN=['Kiwi Center','Kiwi Loge','Maxx','Cameo'];
-const COL=['var(--blue)','var(--violet)','var(--orange)','var(--green)'];
+const CINFO=[{img:'img/center.jpg',walk:5},{img:'img/loge.jpg',walk:10},{img:'img/maxx.jpg',walk:5},{img:'img/cameo.jpg',walk:12}];
+const ADS=[15,15,20,5]; // ungefähre Werbung/Vorspann in Minuten bis zum Film-Ende
 const ORDER=[1,0,3,2]; // Kiwi Loge, Kiwi Center, Cameo, Maxx
 const WD=['So','Mo','Di','Mi','Do','Fr','Sa'];
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-// Vorstellungen mit fester Nummer (#1 …); vergangene ausblenden
-const nowStr=new Date().toLocaleString('sv-SE',{timeZone:'Europe/Zurich'}).slice(5,16); // "MM-DD HH:MM"
+const nowStr=new Date().toLocaleString('sv-SE',{timeZone:'Europe/Zurich'}).slice(5,16);
 const SHOWS=DATA.s.map((r,i)=>({no:i+1,f:r[0],c:r[1],d:r[2],t:r[3],l:r[4],h:r[5],x:r[6]}));
 const UP=SHOWS.filter(s=>(s.d+' '+s.t)>=nowStr);
-function day(md){const d=new Date('2026-'+md+'T12:00:00');if(md<'06')d.setFullYear(2027);return WD[d.getDay()]+' '+d.getDate()+'.'+(d.getMonth()+1)+'.'}
-function label(s){return `${DATA.f[s.f][0]}, ${day(s.d)} ${s.t}, ${CIN[s.c]}${s.l?' ('+s.l+')':''}`}
-
-const F0=()=>({c:[0,1,2,3],t:[],l:['d','o'],q:''});
-const TG=[['Spät','ab 21:00',21,24],['Abend','18:00–20:59',18,21],['Vorabend','16:00–17:59',16,18],['Nachmittag','13:00–15:59',13,16],['Vormittag','bis 12:59',0,13]];
-let st={name:'',films:[],picks:[],paste:'',view:'kino',f:F0()};
-try{const v=JSON.parse(localStorage.getItem('kinobande')||'null');if(v)st={...st,...v}}catch(e){}
-if(!st.f||!Array.isArray(st.f.t)||!Array.isArray(st.f.l))st.f=F0();
-const iso=d=>d.toLocaleDateString('sv-SE',{timeZone:'Europe/Zurich'});
-const TODAY=new Date(iso(new Date())+'T12:00:00');const MON=new Date(TODAY);MON.setDate(TODAY.getDate()-((TODAY.getDay()+6)%7));
-const wk=n=>{const a=new Date(MON);a.setDate(MON.getDate()+7*n);const b=new Date(a);b.setDate(a.getDate()+6);return [iso(a).slice(5),iso(b).slice(5)]};
 const yr=md=>(md<'06'?'2027-':'2026-')+md;
-function inWeek(md,n){const [a,b]=wk(n);return yr(md)>=yr(a)&&yr(md)<=yr(b)}
-function ok(s){const f=st.f;if(!f.c.includes(s.c))return false;
-  if(f.t.length&&!f.t.includes(s.t))return false;
-  if(s.l&&f.l.length===1){const de=/^D/.test(s.l);if(f.l[0]==='d'&&!de)return false;if(f.l[0]==='o'&&de)return false}
-  if(f.q&&!DATA.f[s.f][0].toLowerCase().includes(f.q.toLowerCase()))return false;return true}
+function dobj(md){return new Date(yr(md)+'T12:00:00')}
+function day(md){const d=dobj(md);return WD[d.getDay()]+' '+d.getDate()+'.'+(d.getMonth()+1)+'.'}
+const dm=iso=>{const d=new Date(iso+'T12:00:00');return d.getDate()+'.'+(d.getMonth()+1)+'.'};
+function label(s){return `${DATA.f[s.f][0]}, ${day(s.d)} ${s.t}, ${CIN[s.c]}${s.l?' ('+s.l+')':''}`}
+const mins=t=>+t.slice(0,2)*60+ +t.slice(3,5);
+const hhmm=m=>{m=Math.round(m/5)*5;return String(Math.floor(m/60)%24).padStart(2,'0')+':'+String(m%60).padStart(2,'0')};
+const rt=f=>DATA.f[f][4]||90;
+const endOf=s=>mins(s.t)+ADS[s.c]+rt(s.f);
+// Tageshelligkeit: 10 Uhr hell, 23 Uhr fast schwarz
+function shade(t){const h=mins(t)/60;const k=Math.min(1,Math.max(0,(h-10)/13));const L=Math.round(88-k*80);return {bg:`hsl(30 8% ${L}%)`,fg:L>55?'#111':'#f4f1ec'}}
+const AX0=10*60,AX1=24*60;
+const barI=s=>{const a=Math.max(0,(mins(s.t)-AX0)/(AX1-AX0)*100),b=Math.min(100,(endOf(s)-AX0)/(AX1-AX0)*100);return `<i style="left:${a}%;width:${Math.max(2,b-a)}%"></i>`};
+
+const F0=()=>({c:[0,1,2,3],g:[],q:''});
+const TG=[['Vormittag','bis 13',0,13],['Nachmittag','13–16',13,16],['Vorabend','16–18',16,18],['Abend','18–21',18,21],['Spät','ab 21',21,24]];
+let st={name:'',films:[],picks:[],paste:'',view:'kino',f:F0(),sec:{}};
+try{const v=JSON.parse(localStorage.getItem('kinobande')||'null');if(v)st={...st,...v}}catch(e){}
+if(!st.f||!Array.isArray(st.f.c)||!Array.isArray(st.f.g))st.f={...F0(),q:(st.f&&st.f.q)||''};
+if(!st.sec)st.sec={};
 function save(){try{localStorage.setItem('kinobande',JSON.stringify(st))}catch(e){}}
 function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2000)}
+function inGroups(t){if(!st.f.g.length)return true;const h=+t.slice(0,2);return st.f.g.some(gi=>h>=TG[gi][2]&&h<TG[gi][3])}
+function ok(s){const f=st.f;if(!f.c.includes(s.c))return false;if(!inGroups(s.t))return false;
+  if(f.q&&!DATA.f[s.f][0].toLowerCase().includes(f.q.toLowerCase()))return false;return true}
+const langs=f=>{const ls=new Set(UP.filter(s=>s.f===f&&s.l).map(s=>/^D/.test(s.l)?'DE':'OV'));return ['DE','OV'].filter(x=>ls.has(x))};
+const isNew=f=>{const r=DATA.f[f][5];if(!r)return false;const d=(Date.now()-new Date(r+'T12:00:00'))/864e5;return d<=10&&d>=-7};
 
-function renderNames(){$('#nameIn').value=st.name||'';$('#nameHint').textContent=st.name?'Hallo '+st.name+'! Jetzt unten Filme antippen.':'Dein Name erscheint in der Nachricht an die Gruppe.'}
-$('#nameIn').oninput=e=>{st.name=e.target.value.trim();save();$('#nameHint').textContent=st.name?'Hallo '+st.name+'! Jetzt unten Filme antippen.':'Dein Name erscheint in der Nachricht an die Gruppe.';renderOut()};
+// Kopfzeile
+(function(){const ds=UP.map(s=>yr(s.d)).sort();const u=DATA.u||'';
+  const fmt=iso=>{const d=new Date(iso+'T12:00:00');return d.getDate()+'.'+(d.getMonth()+1)+'.'+d.getFullYear()};
+  $('#sub').innerHTML=`<b>Winterthur</b><span>aktualisiert am ${u?fmt(u):'–'}</span><span>Zeitraum ${ds.length?fmt(ds[0]).replace(/\d{4}$/,'')+' – '+fmt(ds[ds.length-1]):'–'}</span>`})();
 
-function applySize(){document.documentElement.style.setProperty('--pw','130px')}
-function tcard(i){const t=DATA.f[i][0],sh=DATA.s.find(r=>r[0]===i),ci=sh?sh[1]:3,c=['#0a84ff','#bf5af2','#ff9f0a','#30d158'][ci];const w=t.split(/\s+/),L=[];let cur='';
+// Abschnitte merken
+document.querySelectorAll('details.sec').forEach(d=>{const k=d.dataset.sec;if(st.sec[k]===false)d.open=false;d.addEventListener('toggle',()=>{st.sec[k]=d.open;save()})});
+
+function nameHint(){return st.name?'Hallo '+st.name+'! Jetzt Filme doppelt antippen.':'Dein Name erscheint in der Nachricht an die Gruppe.'}
+$('#nameIn').value=st.name||'';$('#nameHint').textContent=nameHint();
+$('#nameIn').oninput=e=>{st.name=e.target.value.trim();save();$('#nameHint').textContent=nameHint();renderOut()};
+
+function tcard(i){const t=DATA.f[i][0],sh=DATA.s.find(r=>r[0]===i),ci=sh?sh[1]:3;const w=t.split(/\s+/),L=[];let cur='';
   w.forEach(x=>{if((cur+' '+x).trim().length>11&&cur){L.push(cur);cur=x}else cur=(cur+' '+x).trim()});if(cur)L.push(cur);
-  const fs=L.length>5?17:L.length>3?20:24,y0=150-(L.length-1)*fs*.6;
-  const e=x=>x.replace(/&/g,'&amp;').replace(/</g,'&lt;');
-  const svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 300"><rect width="200" height="300" fill="#16131f"/><rect x="10" y="10" width="180" height="280" fill="none" stroke="${c}" stroke-width="3"/><text x="100" y="44" fill="${c}" font-family="Helvetica,Arial,sans-serif" font-size="11" font-weight="700" letter-spacing="3" text-anchor="middle">${e(CIN[ci].toUpperCase())}</text>${L.map((l,k)=>`<text x="100" y="${y0+k*fs*1.2}" fill="#fff" font-family="Helvetica,Arial,sans-serif" font-size="${fs}" font-weight="800" text-anchor="middle">${e(l)}</text>`).join('')}<text x="100" y="268" fill="#9a94ad" font-family="Helvetica,Arial,sans-serif" font-size="10" text-anchor="middle">WINTERTHUR</text></svg>`;
+  const fs=L.length>5?17:L.length>3?20:24,y0=150-(L.length-1)*fs*.6;const e=x=>x.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 300"><rect width="200" height="300" fill="#0d0d0d"/><rect x="10" y="10" width="180" height="280" fill="none" stroke="#e3232c" stroke-width="3"/><text x="100" y="44" fill="#e3232c" font-family="Helvetica,Arial,sans-serif" font-size="11" font-weight="700" letter-spacing="3" text-anchor="middle">${e(CIN[ci].toUpperCase())}</text>${L.map((l,k)=>`<text x="100" y="${y0+k*fs*1.2}" fill="#fff" font-family="Helvetica,Arial,sans-serif" font-size="${fs}" font-weight="800" text-anchor="middle">${e(l)}</text>`).join('')}<text x="100" y="268" fill="#8c8780" font-family="Helvetica,Arial,sans-serif" font-size="10" text-anchor="middle">WINTERTHUR</text></svg>`;
   return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg)}
 const purl=i=>DATA.f[i][2]||tcard(i);
 const img=i=>`<img src="${esc(purl(i))}" alt="${esc(DATA.f[i][0])}" loading="lazy" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src=tcard(${i})">`;
+const relKey=f=>DATA.f[f][5]||'0000';
 function cards(list){const cnt={};list.forEach(s=>cnt[s.f]=(cnt[s.f]||0)+1);
-  const ids=Object.keys(cnt).map(Number).sort((a,b)=>cnt[b]-cnt[a]);
-  return `<div class="grid">${ids.map(i=>`<div class="card" role="button" tabindex="0" data-f="${i}" aria-pressed="${st.films.includes(i)}"><span class="pimg" data-p="${i}">${img(i)}</span><span class="cap"><b data-info="${i}">${esc(DATA.f[i][0])}</b><small>${cnt[i]} Vorstellungen</small></span></div>`).join('')}</div>`}
-const OPEN=new Set(); // Kinos, die in dieser Sitzung aufgeklappt sind (beim Start immer zu)
+  const ids=Object.keys(cnt).map(Number).sort((a,b)=>relKey(b).localeCompare(relKey(a))||cnt[b]-cnt[a]);
+  return `<div class="grid">${ids.map(i=>{const r=DATA.f[i][5],y=r&&r.slice(0,4);const sub=[r?(+y>=2026?(new Date(r+'T12:00:00')>Date.now()?'ab ':'seit ')+dm(r):y):'',DATA.f[i][4]?DATA.f[i][4]+' min':''].filter(Boolean).join(' · ');
+    return `<div class="card" role="button" tabindex="0" data-f="${i}" aria-pressed="${st.films.includes(i)}"><span class="pimg" data-p="${i}">${img(i)}${isNew(i)?'<span class="new">NEU</span>':''}<span class="lang">${langs(i).map(l=>`<i class="${l==='OV'?'lov':''}">${l}</i>`).join('')}</span></span><span class="cap"><b data-info="${i}">${esc(DATA.f[i][0])}</b><small>${sub}</small></span></div>`}).join('')}</div>`}
+const OPEN=new Set();
 function closeOv(){$('#ov').hidden=true;$('#ov').innerHTML=''}
 $('#ov').onclick=e=>{if(e.target.id==='ov'||e.target.closest('.close')||e.target.classList.contains('big'))closeOv()};
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeOv()});
 function showBig(i){$('#ov').innerHTML=`<img class="big" src="${esc(purl(i))}" alt="${esc(DATA.f[i][0])}" referrerpolicy="no-referrer">`;$('#ov').hidden=false}
 function showInfo(i){const t=DATA.f[i][0],q=encodeURIComponent(t);
   const cins=[...new Set(UP.filter(s=>s.f===i).map(s=>CIN[s.c]))];
-  $('#ov').innerHTML=`<div class="info"><button class="close" aria-label="Schliessen">✕</button><div class="top">${img(i)}<div><b style="font-size:18px">${esc(t)}</b><br><span class="muted">${esc(DATA.f[i][1])}</span><br><span class="muted">Läuft in: ${cins.map(esc).join(', ')}</span></div></div>
+  $('#ov').innerHTML=`<div class="info"><button class="close" aria-label="Schliessen">✕</button><div class="top">${img(i)}<div><b style="font-size:18px">${esc(t)}</b><br><span class="muted">${esc(DATA.f[i][1])}</span><br><span class="muted">${DATA.f[i][4]?DATA.f[i][4]+' min · ':''}${(langs(i).join(' + ')||'Sprache: siehe Kino-Seite')} · ${cins.map(esc).join(', ')}</span></div></div>
   <div class="links">
    <a class="yt" href="https://www.youtube.com/results?search_query=${q}+trailer+deutsch" target="_blank" rel="noopener">▶️ Trailer DE</a>
    <a class="yt" href="https://www.youtube.com/results?search_query=${q}+official+trailer" target="_blank" rel="noopener">▶️ Trailer EN</a>
@@ -293,7 +329,7 @@ function showInfo(i){const t=DATA.f[i][0],q=encodeURIComponent(t);
   <button class="btn" id="favIn">${st.films.includes(i)?'★ Favorit entfernen':'☆ Als Favorit markieren'}</button></div>`;
   $('#ov').hidden=false;$('#favIn').onclick=e=>{const r=e.target.getBoundingClientRect();toggleFav(i,r.left+r.width/2,r.top);showInfo(i)}}
 function burst(x,y){const b=document.createElement('div');b.className='burst';b.textContent='⭐';b.style.left=x+'px';b.style.top=y+'px';document.body.appendChild(b);setTimeout(()=>b.remove(),800);
-  for(let k=0;k<8;k++){const m=document.createElement('div');m.className='burst mini';m.textContent='✦';const a=k/8*Math.PI*2;m.style.cssText+=`left:${x}px;top:${y}px;--dx:${Math.cos(a)*70}px;--dy:${Math.sin(a)*70}px;color:var(--yellow)`;document.body.appendChild(m);setTimeout(()=>m.remove(),800)}}
+  for(let k=0;k<8;k++){const m=document.createElement('div');m.className='burst mini';m.textContent='✦';const a=k/8*Math.PI*2;m.style.cssText+=`left:${x}px;top:${y}px;--dx:${Math.cos(a)*70}px;--dy:${Math.sin(a)*70}px;color:var(--star)`;document.body.appendChild(m);setTimeout(()=>m.remove(),800)}}
 function toggleFav(i,x,y){const on=!st.films.includes(i);st.films=on?[...st.films,i]:st.films.filter(v=>v!==i);save();if(on&&x!=null)burst(x,y);
   document.querySelectorAll(`.card[data-f="${i}"]`).forEach(c=>c.setAttribute('aria-pressed',on));renderShows();renderOut()}
 let tapT=null,tapI=null;
@@ -304,58 +340,51 @@ $('#films').addEventListener('click',e=>{
   clearTimeout(tapT);tapI=i;tapT=setTimeout(()=>{tapT=null;if(e.target.closest('[data-p]'))showBig(i)},280)});
 $('#films').addEventListener('toggle',e=>{const d=e.target;if(d.dataset&&d.dataset.cin!=null){d.open?OPEN.add(+d.dataset.cin):OPEN.delete(+d.dataset.cin)}},true);
 $('#collapseAll').onclick=()=>{OPEN.clear();document.querySelectorAll('details.cin').forEach(d=>d.open=false)};
+function rerender(){save();renderFilters();renderFilms();renderShows()}
 function renderFilters(){
   $('#viewSeg').innerHTML=[['kino','Nach Kino'],['alle','Alle Filme']].map(([k,l])=>`<button data-v="${k}" aria-pressed="${st.view===k}">${l}</button>`).join('');
-  $('#viewSeg').querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>{st.view=b.dataset.v;save();renderFilters();renderFilms()});
-  $('#cinF').innerHTML=ORDER.map(c=>`<button class="togc" data-c="${c}" aria-pressed="${st.f.c.includes(c)}"><i style="background:${COL[c]}"></i>${CIN[c]}</button>`).join('');
-  $('#cinF').querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{const c=+b.dataset.c;st.f.c=st.f.c.includes(c)?st.f.c.filter(x=>x!==c):[...st.f.c,c];if(!st.f.c.length)st.f.c=[0,1,2,3];save();renderFilters();renderFilms();renderShows()});
+  $('#viewSeg').querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>{st.view=b.dataset.v;rerender()});
+  $('#cinF').innerHTML=ORDER.map(c=>`<button class="ctile" data-c="${c}" aria-pressed="${st.f.c.includes(c)}"><img src="${CINFO[c].img}" alt=""><span><b>${CIN[c]}</b><small>🚶 ${CINFO[c].walk} min</small></span></button>`).join('');
+  $('#cinF').querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{const c=+b.dataset.c;st.f.c=st.f.c.includes(c)?st.f.c.filter(x=>x!==c):[...st.f.c,c];if(!st.f.c.length)st.f.c=[0,1,2,3];rerender()});
+  const has=gi=>UP.some(s=>{const h=+s.t.slice(0,2);return h>=TG[gi][2]&&h<TG[gi][3]});
+  $('#fTimes').innerHTML=TG.map(([n,r,a],gi)=>{const sh=shade(String(Math.max(a,10)+ (gi?1:0)).padStart(2,'0')+':00');
+    return `<button class="tch ${has(gi)?'':'off'}" data-g="${gi}" aria-pressed="${st.f.g.includes(gi)}" style="background:${sh.bg};color:${sh.fg}"><b>${n}</b><small>${r}</small></button>`}).join('');
+  $('#fTimes').querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>{const g=+b.dataset.g;st.f.g=st.f.g.includes(g)?st.f.g.filter(x=>x!==g):[...st.f.g,g];rerender()});
+  const n=(st.f.c.length<4?1:0)+(st.f.g.length?1:0);
+  $('#fSum').textContent=n?`· ${[st.f.c.length<4?st.f.c.length+' von 4 Kinos':'',st.f.g.length?st.f.g.map(g=>TG[g][0]).join(', '):''].filter(Boolean).join(' · ')}`:'';
   $('#fQ').value=st.f.q;
-  $('#vCin').textContent=st.f.c.length===4?'alle':st.f.c.length+' von 4';
-  $('#vLang').textContent=st.f.l.length===2?'beide':st.f.l[0]==='d'?'nur Deutsch':'nur Originalsprache';
-  $('#vTime').textContent=st.f.t.length?st.f.t.length+' Startzeiten':'alle';
-  $('#fLang').querySelectorAll('[data-l]').forEach(b=>{b.setAttribute('aria-pressed',st.f.l.includes(b.dataset.l));b.onclick=()=>{const l=b.dataset.l;st.f.l=st.f.l.includes(l)?st.f.l.filter(x=>x!==l):[...st.f.l,l];if(!st.f.l.length)st.f.l=['d','o'];save();renderFilters();renderFilms();renderShows()}});
-  const all=[...new Set(UP.map(s=>s.t))].sort().reverse();
-  $('#fTimes').innerHTML=TG.map(([n,r,a,b],gi)=>{const ts=all.filter(t=>{const h=+t.slice(0,2);return h>=a&&h<b});if(!ts.length)return '';
-    const sel=ts.filter(t=>st.f.t.includes(t)).length;const pr=sel===0?'false':sel===ts.length?'true':'mixed';
-    return `<div class="tg"><button class="main" data-g="${gi}" aria-pressed="${pr}"><b>${n}</b><span class="muted" style="font-size:12px">${r}</span><small>${ts.length} Zeiten</small></button><button class="more" data-m="${gi}" aria-label="Einzelne Zeiten">${TOPEN.has(gi)?'▾':'▸'}</button>${TOPEN.has(gi)?`<div class="times timechips">${ts.map(t=>`<button data-t="${t}" aria-pressed="${st.f.t.includes(t)}">${t}</button>`).join('')}</div>`:''}</div>`}).join('');
-  const groupTimes=gi=>{const [,,a,b]=TG[gi];return all.filter(t=>{const h=+t.slice(0,2);return h>=a&&h<b})};
-  $('#fTimes').querySelectorAll('[data-g]').forEach(btn=>btn.onclick=()=>{const ts=groupTimes(+btn.dataset.g);const allSel=ts.every(t=>st.f.t.includes(t));st.f.t=allSel?st.f.t.filter(t=>!ts.includes(t)):[...new Set([...st.f.t,...ts])];save();renderFilters();renderFilms();renderShows()});
-  $('#fTimes').querySelectorAll('[data-m]').forEach(btn=>btn.onclick=()=>{const g=+btn.dataset.m;TOPEN.has(g)?TOPEN.delete(g):TOPEN.add(g);renderFilters()});
-  $('#fTimes').querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{const t=b.dataset.t;st.f.t=st.f.t.includes(t)?st.f.t.filter(x=>x!==t):[...st.f.t,t];save();renderFilters();renderFilms();renderShows()});
-  document.querySelectorAll('details.fsec').forEach(d=>{d.open=FOPEN.has(d.dataset.fs);d.ontoggle=()=>{d.open?FOPEN.add(d.dataset.fs):FOPEN.delete(d.dataset.fs)}});
 }
-const TOPEN=new Set(),FOPEN=new Set();
-$('#fQ').oninput=e=>{st.f.q=e.target.value.trim();save();renderFilms();renderShows()};
-$('#fReset').onclick=()=>{st.f=F0();save();renderFilters();renderFilms();renderShows()};
+$('#fQ').oninput=e=>{st.f.q=e.target.value.trim();save();renderFilms();renderShows();if(st.f.q&&!$('details[data-sec="2"]').open)$('details[data-sec="2"]').open=true};
+$('#fReset').onclick=()=>{st.f={...F0(),q:''};rerender()};
 function renderFilms(){
   const list=UP.filter(ok);
-  $('#fCount').textContent=`${new Set(list.map(s=>s.f)).size} Filme, ${list.length} Vorstellungen`;
-  if(!list.length){$('#films').innerHTML='<p class="muted">Keine Vorstellung passt zu diesen Filtern.</p>';return}
+  $('#fCount').textContent=`${new Set(list.map(s=>s.f)).size} Filme · ${list.length} Vorstellungen`;
+  $('#collapseAll').hidden=st.view==='alle';
+  if(!list.length){$('#films').innerHTML='<p class="muted">Nichts gefunden.</p>';return}
   if(st.view==='alle')$('#films').innerHTML=cards(list);
   else $('#films').innerHTML=ORDER.filter(c=>list.some(s=>s.c===c)).map(c=>{const l=list.filter(s=>s.c===c);
-    return `<details class="cin" data-cin="${c}" ${OPEN.has(c)?'open':''}><summary><i style="background:${COL[c]}"></i>${CIN[c]} <small>${new Set(l.map(s=>s.f)).size} Filme</small></summary>${cards(l)}</details>`}).join('');
-  $('#collapseAll').hidden=st.view==='alle';
-  applySize();
+    return `<details class="cin" data-cin="${c}" ${OPEN.has(c)||st.f.q?'open':''}><summary><b>${CIN[c]}</b><small>${new Set(l.map(s=>s.f)).size} Filme · 🚶 ${CINFO[c].walk} min ab Bahnhof</small></summary>${cards(l)}</details>`}).join('');
 }
+function tbtn(s){const sh=shade(s.t);const lg=!s.l?'':/^D/.test(s.l)?'DE':'OV '+s.l;
+  return `<button class="t" data-no="${s.no}" aria-pressed="${st.picks.includes(s.no)}" style="background:${sh.bg};color:${sh.fg}" title="${esc((s.h||'')+' '+(s.x||''))}"><span class="d">${day(s.d)}</span><span class="h">${s.t}<small> – ca. ${hhmm(endOf(s))}</small></span><span></span><span class="c">${CIN[s.c]}${lg?' · '+esc(lg):''}</span><span class="bar">${barI(s)}</span></button>`}
 function renderShows(){
-  if(!st.films.length){$('#shows').innerHTML='<p class="muted">Wähle zuerst oben mindestens einen Film.</p>';return}
   const sv=st.sv||'cover';
   $('#showSeg').innerHTML=[['cover','Neben Cover'],['kal','Kalender']].map(([k,l])=>`<button data-sv="${k}" aria-pressed="${sv===k}">${l}</button>`).join('');
   $('#showSeg').querySelectorAll('[data-sv]').forEach(b=>b.onclick=()=>{st.sv=b.dataset.sv;save();renderShows()});
+  if(!st.films.length){$('#shows').innerHTML='<p class="muted">Zuerst oben einen Film doppelt antippen.</p>';return}
   const mine=UP.filter(s=>st.films.includes(s.f)&&ok(s));
-  const tbtn=s=>`<button class="t" data-no="${s.no}" aria-pressed="${st.picks.includes(s.no)}" title="${esc((s.h||'')+' '+(s.x||''))}"><span class="d">${day(s.d)}</span><span class="h">${s.t}</span><span class="c"><i style="background:${COL[s.c]}"></i>${CIN[s.c]}${s.l?' · '+esc(s.l):''}</span></button>`;
-  const bulk=f=>`<div class="bar"><button class="sz" data-all="${f}">Alle an</button><button class="sz" data-none="${f}">Alle aus</button><a class="sz" style="text-decoration:none;color:var(--fg)" href="${esc(DATA.f[f][3])}" target="_blank" rel="noopener">Trailer &amp; Infos</a></div>`;
+  const ax='<div class="axis"><span>10</span><span>14</span><span>18</span><span>22</span><span>24</span></div>';
   if(sv==='cover'){
     $('#shows').innerHTML=st.films.map(f=>{const list=mine.filter(s=>s.f===f);
-      return `<div class="fside">${img(f)}<div class="info"><b>${esc(DATA.f[f][0])}</b><span class="muted">${esc(DATA.f[f][1])}</span>${list.length?`<div class="times">${list.map(tbtn).join('')}</div>${bulk(f)}`:'<span class="muted">Keine Vorstellung passt zu den Filtern oben.</span>'}</div></div>`}).join('');
+      return `<div class="fside">${img(f)}<div class="info"><b>${esc(DATA.f[f][0])}</b><span class="muted">${[DATA.f[f][4]?DATA.f[f][4]+' min':'',langs(f).join(' + ')].filter(Boolean).join(' · ')}</span>${list.length?`<div class="times">${list.map(tbtn).join('')}</div><div class="bulk"><button class="lnk" data-all="${f}">Alle an</button><button class="lnk" data-none="${f}">Alle aus</button><button class="lnk" data-info="${f}">Trailer &amp; Infos</button></div>`:'<span class="muted">Keine Vorstellung passt zu den Filtern.</span>'}</div></div>`}).join('');
   }else{
-    const days=[...new Set(mine.map(s=>s.d))];
+    const days=[...new Set(mine.map(s=>s.d))].sort((a,b)=>yr(a).localeCompare(yr(b)));
     $('#shows').innerHTML=days.length?`<div class="cal">${days.map(d=>{const l=mine.filter(s=>s.d===d).sort((a,b)=>a.t.localeCompare(b.t));const n=l.filter(s=>st.picks.includes(s.no)).length;
-      return `<div><div class="dayh">${day(d)}<small>${n?n+' gewählt':''}</small></div><div class="slots">${l.map(s=>`<button class="t2" data-no="${s.no}" aria-pressed="${st.picks.includes(s.no)}"><span class="h">${s.t}</span>${img(s.f)}<span class="w"><b>${esc(DATA.f[s.f][0])}</b><small><i style="background:${COL[s.c]}"></i>${CIN[s.c]}${s.l?' · '+esc(s.l):''}</small></span></button>`).join('')}</div></div>`}).join('')}</div>`:'<p class="muted">Keine Vorstellung passt zu den Filtern oben.</p>';
+      return `<div><div class="dayh">${day(d)}<small>${n?n+' gewählt':''}</small></div><div class="slots">${l.map(s=>{const sh=shade(s.t);const lg=!s.l?'':/^D/.test(s.l)?'DE':'OV '+s.l;return `<button class="t2" data-no="${s.no}" aria-pressed="${st.picks.includes(s.no)}" style="background:${sh.bg};color:${sh.fg}"><span class="h">${s.t}<small> – ${hhmm(endOf(s))}</small></span>${img(s.f)}<span class="w"><b>${esc(DATA.f[s.f][0])}</b><small>${CIN[s.c]}${lg?' · '+esc(lg):''}</small></span><span class="bar">${barI(s)}</span></button>`}).join('')}</div></div>`}).join('')}</div>`:'<p class="muted">Keine Vorstellung passt zu den Filtern.</p>';
   }
   $('#shows').querySelectorAll('[data-all]').forEach(b=>b.onclick=()=>{const f=+b.dataset.all;mine.filter(s=>s.f===f).forEach(s=>{if(!st.picks.includes(s.no))st.picks.push(s.no)});save();renderShows();renderOut()});
   $('#shows').querySelectorAll('[data-none]').forEach(b=>b.onclick=()=>{const f=+b.dataset.none;const n=new Set(mine.filter(s=>s.f===f).map(s=>s.no));st.picks=st.picks.filter(x=>!n.has(x));save();renderShows();renderOut()});
-  applySize();
+  $('#shows').querySelectorAll('[data-info]').forEach(b=>b.onclick=()=>showInfo(+b.dataset.info));
   $('#shows').querySelectorAll('[data-no]').forEach(b=>b.onclick=()=>{const n=+b.dataset.no;st.picks=st.picks.includes(n)?st.picks.filter(x=>x!==n):[...st.picks,n];save();b.setAttribute('aria-pressed',st.picks.includes(n));renderOut()});
 }
 function myText(){
@@ -366,33 +395,21 @@ function myText(){
 function renderOut(){const t=myText();$('#out').textContent=t||'Noch nichts gewählt.';$('#cnt').textContent=t?`${st.picks.length} Vorstellungen gewählt`:'';renderHits()}
 $('#connBtn').onclick=()=>{$('#connPanel').hidden=!$('#connPanel').hidden};
 $('#copy').onclick=async()=>{const t=myText();if(!t){toast('Zuerst Vorstellungen wählen');return}
-  try{await navigator.clipboard.writeText(t+'\n\n(Trag dich auch ein: Kinobande-App)');toast('Kopiert – jetzt in WhatsApp einfügen')}
+  try{await navigator.clipboard.writeText(t+'\n\n(Trag dich auch ein: https://resetenou.github.io/kino/)');toast('Kopiert – jetzt in WhatsApp einfügen')}
   catch(e){const r=document.createRange();r.selectNodeContents($('#out'));const s=getSelection();s.removeAllRanges();s.addRange(r);toast('Text markiert – jetzt kopieren')}};
-
-// Nachrichten der anderen auswerten
-function parsePeople(txt){
-  const ppl={};let cur=null;
-  for(const line of txt.split('\n')){
-    const m=line.match(/Kinobande\s*[–-]\s*(.+?)\s+kann:/i);
+function parsePeople(txt){const ppl={};let cur=null;
+  for(const line of txt.split('\n')){const m=line.match(/Kinobande\s*[–-]\s*(.+?)\s+kann:/i);
     if(m){cur=m[1].trim();ppl[cur]=ppl[cur]||new Set();continue}
-    if(cur)for(const n of line.matchAll(/#(\d{1,3})\b/g))ppl[cur].add(+n[1]);
-  }
-  return ppl;
-}
-function renderHits(){
-  const ppl=parsePeople(st.paste);
-  const me=st.name||'Ich';
-  if(st.picks.length)ppl[me]=new Set(st.picks);
-  const names=Object.keys(ppl);
-  if(names.length<2){$('#hits').innerHTML=`<p class="muted">${names.length?'Sobald die Nachricht von mindestens einer weiteren Person eingefügt ist, erscheinen hier die gemeinsamen Termine.':'Noch keine Auswahl vorhanden.'}</p>`;return}
+    if(cur)for(const n of line.matchAll(/#(\d{1,3})\b/g))ppl[cur].add(+n[1]);}
+  return ppl}
+function renderHits(){const ppl=parsePeople(st.paste);const me=st.name||'Ich';if(st.picks.length)ppl[me]=new Set(st.picks);const names=Object.keys(ppl);
+  if(names.length<2){$('#hits').innerHTML=`<p class="muted">${names.length?'Sobald die Nachricht einer weiteren Person drin ist, erscheinen hier die gemeinsamen Termine.':'Noch keine Auswahl vorhanden.'}</p>`;return}
   const score={};names.forEach(n=>ppl[n].forEach(no=>(score[no]=score[no]||[]).push(n)));
   const list=Object.entries(score).map(([no,w])=>({s:SHOWS[no-1],w})).filter(x=>x.s&&(x.s.d+' '+x.s.t)>=nowStr&&x.w.length>1)
-    .sort((a,b)=>b.w.length-a.w.length||(a.s.d+a.s.t).localeCompare(b.s.d+b.s.t)).slice(0,12);
-  $('#hits').innerHTML=`<p class="muted">Ausgewertet: ${names.map(esc).join(', ')}</p>`+(list.length?list.map(x=>`<div class="hit ${x.w.length===names.length?'all':''}"><span class="when">${day(x.s.d)}<br>${x.s.t}</span><b>${esc(DATA.f[x.s.f][0])} · ${CIN[x.s.c]}${x.s.l?' ('+esc(x.s.l)+')':''}</b><span class="who">${x.w.length===names.length?'✅ Alle können':x.w.length+' von '+names.length+': '+x.w.map(esc).join(', ')}</span></div>`).join(''):'<p class="muted">Noch keine Vorstellung, die zwei oder mehr Leuten passt.</p>');
-}
+    .sort((a,b)=>b.w.length-a.w.length||(yr(a.s.d)+a.s.t).localeCompare(yr(b.s.d)+b.s.t)).slice(0,12);
+  $('#hits').innerHTML=`<p class="muted">Ausgewertet: ${names.map(esc).join(', ')}</p>`+(list.length?list.map(x=>`<div class="hit ${x.w.length===names.length?'all':''}"><span class="when">${day(x.s.d)}<br>${x.s.t}</span><b>${esc(DATA.f[x.s.f][0])} · ${CIN[x.s.c]}${x.s.l?' ('+esc(x.s.l)+')':''}</b><span class="who">${x.w.length===names.length?'✅ Alle können':x.w.length+' von '+names.length+': '+x.w.map(esc).join(', ')}</span></div>`).join(''):'<p class="muted">Noch keine Vorstellung, die zwei oder mehr Leuten passt.</p>')}
 $('#paste').value=st.paste;
 $('#paste').oninput=e=>{st.paste=e.target.value;save();renderHits()};
-
-renderNames();renderFilters();renderFilms();renderShows();renderOut();
+renderFilters();renderFilms();renderShows();renderOut();
 </script>
 </body></html>
