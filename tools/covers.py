@@ -11,7 +11,7 @@ Reihenfolge pro Film (erste Quelle, die ein HOCHFORMAT-Bild liefert, gewinnt):
   5. nichts                 – die App zeigt eine Titelkarte; der Film steht in posters/FEHLT.txt
 Querformat (Breite >= Höhe / 1.2) wird immer verworfen: das sind Szenenbilder, keine Plakate.
 """
-import json, os, re, subprocess, sys, unicodedata, urllib.parse, io
+import json, os, re, subprocess, sys, unicodedata, urllib.parse, io, html
 from PIL import Image
 
 UA = "Mozilla/5.0 (Macintosh) Chrome/130"
@@ -53,9 +53,10 @@ def tmdb(title):
     h = get('https://www.themoviedb.org/search/movie?query=' + urllib.parse.quote(re.split(r'\s[(–]', title)[0])).decode('utf8', 'ignore')
     for path in list(dict.fromkeys(re.findall(r'href="(/movie/\d+[^"?]*)"', h)))[:4]:
         page = get('https://www.themoviedb.org' + path + '?language=de-DE').decode('utf8', 'ignore')
-        t = re.search(r'<title>(.*?) \(\d{4}\)', page)
+        en = get('https://www.themoviedb.org' + path + '?language=en-US').decode('utf8', 'ignore')
+        names = [x.group(1) for x in (re.search(r'<title>(.*?) \(\d{4}\)', page), re.search(r'<title>(.*?) \(\d{4}\)', en)) if x]
         m = re.search(r'og:image" content="([^"]+/w500/[^"]+)', page)
-        if t and m and norm(t.group(1)) == norm(title):
+        if m and any(norm(html.unescape(n)) == norm(title) for n in names):
             yield m.group(1).replace('/w500/', '/w342/')
 
 

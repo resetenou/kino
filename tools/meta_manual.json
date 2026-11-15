@@ -1,0 +1,68 @@
+{
+ "Kleine Laterne – Gefühle": {
+  "premnote": "Programm für Kinder von 4 bis 6 Jahren",
+  "genres": [
+   "Kinderfilm",
+   "Kurzfilme"
+  ],
+  "land": "Schweiz",
+  "year": "2026"
+ },
+ "Eifach machä – Eidberger Openair, der Film": {
+  "premnote": "Kino Cameo Winterthur",
+  "genres": [
+   "Dokumentarfilm",
+   "Musik"
+  ],
+  "land": "Schweiz",
+  "year": "2026",
+  "regie": [
+   "Noah van Dok"
+  ],
+  "prem": "2026-12-03"
+ },
+ "Best-of Int. Kurzfilmtage Winterthur 2026": {
+  "premnote": "Internationale Kurzfilmtage Winterthur",
+  "genres": [
+   "Kurzfilme"
+  ],
+  "land": "Schweiz",
+  "year": "2026",
+  "prem": "2026-11-03"
+ },
+ "Gioia mia (Mein Sommer mit Nonna)": {
+  "prem": "2025-08-11",
+  "premnote": "Locarno Film Festival",
+  "genres": [
+   "Drama"
+  ],
+  "year": "2025",
+  "land": "Italien",
+  "regie": [
+   "Margherita Spampinato"
+  ]
+ },
+ "Gruppo di famiglia in un interno (Gewalt und Leidenschaft)": {
+  "genres": [
+   "Drama"
+  ],
+  "regie": [
+   "Luchino Visconti"
+  ],
+  "prem": "1974-12-10",
+  "premnote": "Milan",
+  "land": "Italien, Frankreich",
+  "year": "1974"
+ },
+ "From Ground Zero – Filmtour 2026": {
+  "prem": "2024-07-05",
+  "premnote": "Amman International Film Festival",
+  "genres": [
+   "Dokumentarfilm",
+   "Drama",
+   "Animation"
+  ],
+  "year": "2024",
+  "land": "Palästina"
+ }
+}
